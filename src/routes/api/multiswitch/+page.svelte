@@ -44,10 +44,11 @@
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 20%">Property</th>
-							<th style="width: 25%">Type</th>
-							<th style="width: 15%">Default</th>
-							<th style="width: 40%">Description</th>
+							<th style="width: 18%">Property</th>
+							<th style="width: 22%">Type</th>
+							<th style="width: 12%">Default</th>
+							<th style="width: 35%">Description</th>
+							<th style="width: 13%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -56,60 +57,91 @@
 							<td><code>number</code></td>
 							<td><code>0</code></td>
 							<td>Currently selected index (bindable)</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>items</code> *</td>
 							<td><code>any[]</code></td>
 							<td><code>required</code></td>
 							<td>Array of options to display</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>isDisabled</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Disables interaction when true</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>orientation</code></td>
 							<td><code>"horizontal" | "vertical"</code></td>
 							<td><code>"horizontal"</code></td>
 							<td>Layout direction of the switch</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>size</code></td>
 							<td><code>number</code></td>
 							<td><code>50</code></td>
 							<td>Height in pixels (width for vertical)</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>itemStyles</code></td>
 							<td><code>StepStyle | StepStyle[]</code></td>
 							<td><code>[]</code></td>
 							<td>Custom styling for each option</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>shouldDisplayLabels</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Show/hide option labels</td>
+							<td><span class="badge bg-success">1.3.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelPosition</code></td>
 							<td><code>"top" | "bottom" | "left" | "right"</code></td>
 							<td><code>"bottom"</code></td>
 							<td>Position of labels relative to switch</td>
+							<td><span class="badge bg-success">1.3.0+</span></td>
 						</tr>
 						<tr>
-							<td><code>onSelectionChange</code></td>
+							<td><code>labelRenderMode</code></td>
+							<td><code>"absolute" | "block"</code></td>
+							<td><code>"absolute"</code></td>
+							<td>Label rendering mode - absolute (may overlap) or block (takes space)</td>
+							<td><span class="badge bg-warning">1.4.0+</span></td>
+						</tr>
+						<tr>
+							<td><code>labelMember</code></td>
+							<td><code>string</code></td>
+							<td><code>undefined</code></td>
+							<td>Property name to extract label text from items (e.g., "name" reads item.name)</td>
+							<td><span class="badge bg-warning">1.4.0+</span></td>
+						</tr>
+						<tr>
+							<td><code>labelCallback</code></td>
+							<td><code>(item: any, index: number) => string</code></td>
+							<td><code>undefined</code></td>
+							<td>Custom function to generate label text with item and index access</td>
+							<td><span class="badge bg-warning">1.4.0+</span></td>
+						</tr>
+						<tr>
+							<td><code>onItemChange</code></td>
 							<td><code>(index: number) => void</code></td>
 							<td><code>undefined</code></td>
 							<td>Callback fired when selection changes</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>disableThumbRender</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Disable default thumb rendering</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -126,9 +158,10 @@
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 25%">Snippet</th>
-							<th style="width: 35%">Parameters</th>
-							<th style="width: 40%">Description</th>
+							<th style="width: 23%">Snippet</th>
+							<th style="width: 32%">Parameters</th>
+							<th style="width: 32%">Description</th>
+							<th style="width: 13%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -136,16 +169,19 @@
 							<td><code>children</code></td>
 							<td><code>currentIndex: number<br>item: any<br>isSelected: boolean</code></td>
 							<td>Custom content snippet for option areas</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>thumbTemplate</code></td>
 							<td><code>currentIndex: number<br>currentItem: any<br>itemsCount: number</code></td>
 							<td>Custom thumb content snippet</td>
+							<td><span class="badge bg-info">1.2.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelTemplate</code></td>
 							<td><code>currentIndex: number<br>item: any<br>isSelected: boolean</code></td>
 							<td>Custom label template snippet</td>
+							<td><span class="badge bg-success">1.3.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -249,9 +285,13 @@
 
 		<!-- Label Positioning -->
 		<div class="mb-5">
-			<h3 class="mb-4">🏷️ Label Positioning</h3>
+			<h3 class="mb-4">🏷️ Label Positioning & Rendering</h3>
+			<div class="alert alert-info">
+				<strong>💡 New in v1.4.0:</strong> Use <code>labelRenderMode="block"</code> for automatic spacing,
+				or stick with <code>labelRenderMode="absolute"</code> (default) for precise control with manual padding.
+			</div>
 			<div class="alert alert-warning">
-				<strong>⚠️ Important:</strong> All labels are absolutely positioned and don't reserve space in the layout.
+				<strong>⚠️ Absolute Mode:</strong> Labels are absolutely positioned and don't reserve space in the layout.
 				Add appropriate padding to prevent overlap:
 			</div>
 
@@ -290,15 +330,86 @@
 			</div>
 
 			<CodeBlock
-				codeContent={`<!-- Example with proper spacing -->
+				codeContent={`<!-- Absolute mode - manual spacing required -->
 <div style="padding-bottom: 2.5rem;">
   <MultiSwitch
     items={options}
     shouldDisplayLabels={true}
-    labelPosition="bottom" />
-</div>`}
+    labelPosition="bottom"
+    labelRenderMode="absolute" />
+</div>
+
+<!-- Block mode - automatic spacing -->
+<MultiSwitch
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="bottom"
+  labelRenderMode="block" />`}
 				languageType="svelte"
 			/>
+		</div>
+
+		<!-- Label Content Features (v1.4.0+) -->
+		<div class="mb-5">
+			<h3 class="mb-4">🔤 Label Content Features (v1.4.0+)</h3>
+			<p>Advanced label text handling with automatic extraction from object properties or custom functions.</p>
+
+			<h5>Label Priority System</h5>
+			<ol>
+				<li><strong>labelMember</strong> - Extract text from object property</li>
+				<li><strong>labelCallback</strong> - Custom function with item and index access</li>
+				<li><strong>labelTemplate</strong> - Full custom rendering control</li>
+				<li><strong>Default</strong> - "Option 1", "Option 2", etc.</li>
+			</ol>
+
+			<div class="row g-4">
+				<div class="col-lg-6">
+					<h6>Object Property Extraction</h6>
+					<CodeBlock
+						codeContent={`<script>
+  const products = [
+    { name: 'Basic', price: 10 },
+    { name: 'Pro', price: 25 },
+    { name: 'Enterprise', price: 99 }
+  ];
+</script>
+
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={products}
+  labelMember="name"
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />`}
+						languageType="svelte"
+					/>
+				</div>
+
+				<div class="col-lg-6">
+					<h6>Custom Label Function</h6>
+					<CodeBlock
+						codeContent={`<script>
+  const plans = [
+    { tier: 'Basic', price: 9, features: 3 },
+    { tier: 'Pro', price: 29, features: 10 },
+    { tier: 'Enterprise', price: 99, features: 25 }
+  ];
+</script>
+
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={plans}
+  labelCallback={(item, index) => \`\${item.tier} - $\${item.price}/mo\`}
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />`}
+						languageType="svelte"
+					/>
+				</div>
+			</div>
+
+			<div class="alert alert-success mt-3">
+				<strong>💡 Clickable Labels:</strong> In vertical mode with left/right label positions,
+				labels become clickable when no <code>thumbTemplate</code> is defined. Click any label to jump directly to that option!
+			</div>
 		</div>
 
 		<!-- SCSS Variables -->
@@ -408,12 +519,15 @@ $multi-switch-active-bg: #4299e1;
 				codeContent={`// Get component reference
 let multiSwitchRef;
 
-// Update multiple properties
+// Update multiple properties including v1.4.0+ features
 multiSwitchRef.update({
   selectedIndex: 2,
   isDisabled: false,
   size: 60,
   shouldDisplayLabels: true,
+  labelRenderMode: 'block',
+  labelPosition: 'bottom',
+  labelMember: 'displayName',
   itemStyles: [
     { thumbColor: '#10b981' },
     { thumbColor: '#f59e0b' },

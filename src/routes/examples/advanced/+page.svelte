@@ -144,24 +144,30 @@
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<div class="switch-demo">
+					<div class="switch-demo" style="padding-bottom: 5rem;">
 						<span class="switch-label">Status Monitor:</span>
 						<MultiSwitch
 							bind:selectedIndex={customChildrenMulti}
 							items={statusLevels}
 							size={80}
-							shouldDisplayLabels={false}>
+							shouldDisplayLabels={true}
+							labelPosition="bottom">
 							{#snippet children({ currentIndex, item, isSelected })}
 								<div class="text-center h-100 d-flex flex-column align-items-center justify-content-center {isSelected ? 'bg-white' : ''}">
 									<div style="font-size: 1.2rem;">{item?.icon || ''}</div>
 									<small class="fw-bold" style="font-size: 0.7rem;">{item?.name || ''}</small>
 								</div>
 							{/snippet}
-						</MultiSwitch>
-						<span class="switch-state">Status: {statusLevels[customChildrenMulti].name} - {statusLevels[customChildrenMulti].description}</span>
+							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+								<div class="text-center mt-2">
+									<small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</small>
+									<div class="small text-muted">{item?.description || ''}</div>
+								</div>
+							{/snippet}
+						</MultiSwitch>						
 					</div>
 
-					<div class="switch-demo" style="padding-bottom: 2.5rem;">
+					<div class="switch-demo" style="padding-bottom: 3.5rem;">
 						<span class="switch-label">Media Controls:</span>
 						<MultiSwitch
 							bind:selectedIndex={customThumbMulti}
@@ -260,7 +266,7 @@
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<div class="switch-demo">
+					<div class="switch-demo mb-5">
 						<span class="switch-label">Power Levels:</span>
 						<MultiSwitch
 							bind:selectedIndex={customLabelMulti}
@@ -383,7 +389,7 @@
 			descriptionColumnTitle="Advanced Integration">
 
 			{#snippet demoContent()}
-				<div class="switch-demo" style="padding-bottom: 3rem;">
+				<div class="switch-demo" style="padding-bottom: 5rem;">
 					<span class="switch-label">Theme Selector:</span>
 					<MultiSwitch
 						bind:selectedIndex={complexTemplateMulti}
@@ -429,7 +435,6 @@
 							</div>
 						{/snippet}
 					</MultiSwitch>
-					<span class="switch-state">Selected Theme: {['Light', 'Dark', 'Auto'][complexTemplateMulti]}</span>
 				</div>
 			{/snippet}
 

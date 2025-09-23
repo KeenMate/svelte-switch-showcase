@@ -21,8 +21,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@keenmate/svelte-docs": "^1.0.0-rc01",
-		"@keenmate/svelte-switch": "^1.3.0",
+		"@keenmate/svelte-docs": "^1.0.0-rc02",
+		"@keenmate/svelte-switch": "^1.4.0",
 		"bootstrap": "^5.3.8"
 	}
 }

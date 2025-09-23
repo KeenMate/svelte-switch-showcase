@@ -43,10 +43,11 @@
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 20%">Property</th>
-							<th style="width: 25%">Type</th>
-							<th style="width: 15%">Default</th>
-							<th style="width: 40%">Description</th>
+							<th style="width: 18%">Property</th>
+							<th style="width: 22%">Type</th>
+							<th style="width: 12%">Default</th>
+							<th style="width: 35%">Description</th>
+							<th style="width: 13%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -55,48 +56,56 @@
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Current state of the switch (bindable)</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>isDisabled</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Disables interaction when true</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>orientation</code></td>
 							<td><code>"horizontal" | "vertical"</code></td>
 							<td><code>"horizontal"</code></td>
 							<td>Layout direction of the switch</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>size</code></td>
 							<td><code>number</code></td>
 							<td><code>50</code></td>
 							<td>Height in pixels (width for vertical)</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>items</code></td>
 							<td><code>any[] | null</code></td>
 							<td><code>null</code></td>
 							<td>Array of exactly 2 items for custom content</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>itemStyles</code></td>
 							<td><code>StepStyle | StepStyle[]</code></td>
 							<td><code>[]</code></td>
 							<td>Custom styling for track and thumb</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>onToggle</code></td>
 							<td><code>(checked: boolean) => void</code></td>
 							<td><code>undefined</code></td>
 							<td>Callback fired when state changes</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>disableThumbRender</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Disable default thumb rendering</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -110,9 +119,10 @@
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 25%">Snippet</th>
-							<th style="width: 35%">Parameters</th>
-							<th style="width: 40%">Description</th>
+							<th style="width: 23%">Snippet</th>
+							<th style="width: 32%">Parameters</th>
+							<th style="width: 32%">Description</th>
+							<th style="width: 13%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -120,11 +130,13 @@
 							<td><code>children</code></td>
 							<td><code>currentIndex: number<br>item: any<br>isSelected: boolean</code></td>
 							<td>Custom content snippet for switch areas</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>thumbTemplate</code></td>
 							<td><code>currentIndex: number<br>currentItem: any<br>itemsCount: number</code></td>
 							<td>Custom thumb content snippet</td>
+							<td><span class="badge bg-info">1.2.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
@@ -293,9 +305,10 @@ $default-label-active-font-weight: bold;
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 25%">Method</th>
-							<th style="width: 35%">Signature</th>
-							<th style="width: 40%">Description</th>
+							<th style="width: 23%">Method</th>
+							<th style="width: 32%">Signature</th>
+							<th style="width: 32%">Description</th>
+							<th style="width: 13%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -303,6 +316,7 @@ $default-label-active-font-weight: bold;
 							<td><code>update</code></td>
 							<td><code>(props: Partial&lt;SwitchProps&gt;) => void</code></td>
 							<td>Programmatically update component properties</td>
+							<td><span class="badge bg-primary">1.0.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
