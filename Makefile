@@ -4,7 +4,7 @@
 # === Configuration ===
 # Docker image settings
 DOCKER_IMAGE_NAME = registry.km8.es/svelte-switch-showcase
-DOCKER_TAG = production
+DOCKER_TAG = prod
 DOCKER_CONTAINER_NAME = svelte-switch-showcase
 DOCKER_PORT = 8080
 
@@ -18,7 +18,7 @@ OUTPUT_DIR = .svelte-kit
 NODE_MODULES = node_modules
 PACKAGE_LOCK = package-lock.json
 
-.PHONY: help install dev build preview clean link-lib package deploy docker-build docker-run docker-stop
+.PHONY: help install dev build preview clean link-lib package deploy docker-build docker-run docker-start docker-stop
 
 # Default target
 help: ## Show this help message
@@ -137,48 +137,31 @@ docker-build: ## Build Docker image
 	docker build -t $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) .
 	@echo "Docker image built successfully!"
 
-docker-run: ## Run Docker container
+docker-run: ## Run Docker container (creates new container)
 	@echo "Starting Docker container on port $(DOCKER_PORT)"
-	@if [ $$(docker ps -q -f name=$(DOCKER_CONTAINER_NAME)) ]; then \
-		echo "Container is already running at http://localhost:$(DOCKER_PORT)"; \
-	elif [ $$(docker ps -aq -f name=$(DOCKER_CONTAINER_NAME)) ]; then \
-		echo "Starting existing container"; \
-		docker start $(DOCKER_CONTAINER_NAME); \
-		echo "Application is running at: http://localhost:$(DOCKER_PORT)"; \
-	else \
-		echo "Creating and starting new container"; \
-		docker run -d --name $(DOCKER_CONTAINER_NAME) -p $(DOCKER_PORT):80 $(DOCKER_IMAGE_NAME):$(DOCKER_TAG); \
-		echo "Application is running at: http://localhost:$(DOCKER_PORT)"; \
-	fi
+	docker run -d --name $(DOCKER_CONTAINER_NAME) -p $(DOCKER_PORT):80 $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	@echo "Application is running at: http://localhost:$(DOCKER_PORT)"
+
+docker-start: ## Start existing Docker container
+	@echo "Starting existing Docker container"
+	docker start $(DOCKER_CONTAINER_NAME)
+	@echo "Application is running at: http://localhost:$(DOCKER_PORT)"
 
 docker-stop: ## Stop Docker container
 	@echo "Stopping Docker container"
-	@if [ $$(docker ps -q -f name=$(DOCKER_CONTAINER_NAME)) ]; then \
-		docker stop $(DOCKER_CONTAINER_NAME); \
-		echo "Container stopped successfully"; \
-	else \
-		echo "Container is not running"; \
-	fi
+	docker stop $(DOCKER_CONTAINER_NAME)
+	@echo "Container stopped successfully"
 
-docker-restart: docker-stop docker-run ## Restart Docker container
+docker-restart: docker-stop docker-start ## Restart Docker container
 
 docker-logs: ## Show Docker container logs
-	@if [ $$(docker ps -aq -f name=$(DOCKER_CONTAINER_NAME)) ]; then \
-		docker logs -f $(DOCKER_CONTAINER_NAME); \
-	else \
-		echo "Container does not exist"; \
-	fi
+	docker logs -f $(DOCKER_CONTAINER_NAME)
 
 docker-clean: docker-stop ## Remove Docker container and image
 	@echo "Cleaning up Docker resources"
-	@if [ $$(docker ps -aq -f name=$(DOCKER_CONTAINER_NAME)) ]; then \
-		docker rm $(DOCKER_CONTAINER_NAME); \
-		echo "Container removed"; \
-	fi
-	@if [ $$(docker images -q $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)) ]; then \
-		docker rmi $(DOCKER_IMAGE_NAME):$(DOCKER_TAG); \
-		echo "Image removed"; \
-	fi
+	docker rm $(DOCKER_CONTAINER_NAME)
+	docker rmi $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	@echo "Docker resources cleaned"
 
 docker-deploy: docker-build docker-run ## Build and run Docker container
 
