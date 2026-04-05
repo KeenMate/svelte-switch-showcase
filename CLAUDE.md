@@ -165,4 +165,4 @@ npm run build                   # Static build
 - Organize examples by complexity: basic → multi → labels → styling → advanced
 - Separate API documentation from examples
 - Include comprehensive prop tables and type definitions
-- Always provide working interactive demos alongside code examples
+- Always provide working interactive demos alongside code examples 
