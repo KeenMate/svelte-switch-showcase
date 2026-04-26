@@ -2,7 +2,6 @@
 	import { DocLayout, ShowcaseSection, CodeBlock } from '@keenmate/svelte-docs';
 	import { MultiSwitch } from '@keenmate/svelte-switch';
 
-	// Demo states
 	let basicMultiIndex = $state(0);
 	let powerLevelIndex = $state(1);
 	let moodIndex = $state(2);
@@ -13,7 +12,6 @@
 	let callbackIndex = $state(0);
 	let callbackMessage = $state('');
 
-	// Demo data
 	const basicOptions = ['Option A', 'Option B', 'Option C'];
 	const powerLevels = ['Off', 'Low', 'Medium', 'High', 'Maximum'];
 	const moods = ['😢', '😐', '😊', '😍'];
@@ -37,22 +35,21 @@
 	<div class="py-4">
 		<!-- Basic Usage -->
 		<ShowcaseSection
-			titleText="Basic Usage"
+			titleText="MS01 Basic Usage"
 			subtitleText="Simple multi-option switch with labels"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Explanation">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Explanation">
 
 			{#snippet demoContent()}
 				<div class="switch-demo">
 					<span class="switch-label">Choose option:</span>
-					<div style="padding-bottom: 2.5rem;">
-						<MultiSwitch
-							bind:selectedIndex={basicMultiIndex}
-							items={basicOptions}
-							shouldDisplayLabels={true}
-							labelPosition="bottom" />
-					</div>
+					<MultiSwitch
+						bind:selectedIndex={basicMultiIndex}
+						items={basicOptions}
+						shouldDisplayLabels={true}
+						labelPosition="bottom"
+						labelRenderMode="block" />
 					<span class="switch-state">Selected: {basicOptions[basicMultiIndex]}</span>
 				</div>
 			{/snippet}
@@ -64,13 +61,14 @@
 
   let selectedIndex = $state(0);
   const options = ['Option A', 'Option B', 'Option C'];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selectedIndex}
   items={options}
   shouldDisplayLabels={true}
-  labelPosition="bottom" />
+  labelPosition="bottom"
+  labelRenderMode="block" />
 
 <p>Selected: {options[selectedIndex]}</p>`}
 					languageType="svelte"
@@ -86,6 +84,12 @@
 					<h4>Items Array</h4>
 					<p>
 						Pass an array of strings or objects to define the available options.
+						The array type flows through to all snippet contexts via the generic <code>T</code>.
+					</p>
+					<h4>Block label rendering</h4>
+					<p>
+						<code>labelRenderMode="block"</code> reserves space for labels in document
+						flow — no manual padding needed.
 					</p>
 				</div>
 			{/snippet}
@@ -93,35 +97,33 @@
 
 		<!-- Different Option Counts -->
 		<ShowcaseSection
-			titleText="Different Option Counts"
+			titleText="MS02 Different Option Counts"
 			subtitleText="MultiSwitch adapts to any number of options"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Guidelines">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Guidelines">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
 					<div class="switch-demo">
 						<span class="switch-label">Power Level (5 options):</span>
-						<div style="padding-bottom: 2.5rem;">
-							<MultiSwitch
-								bind:selectedIndex={powerLevelIndex}
-								items={powerLevels}
-								shouldDisplayLabels={true}
-								labelPosition="bottom" />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={powerLevelIndex}
+							items={powerLevels}
+							shouldDisplayLabels={true}
+							labelPosition="bottom"
+							labelRenderMode="block" />
 						<span class="switch-state">Level: {powerLevels[powerLevelIndex]}</span>
 					</div>
 					<div class="switch-demo">
 						<span class="switch-label">Mood (4 emojis):</span>
-						<div style="padding-bottom: 2.5rem;">
-							<MultiSwitch
-								bind:selectedIndex={moodIndex}
-								items={moods}
-								shouldDisplayLabels={true}
-								labelPosition="bottom"
-								size={60} />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={moodIndex}
+							items={moods}
+							shouldDisplayLabels={true}
+							labelPosition="bottom"
+							labelRenderMode="block"
+							size={60} />
 						<span class="switch-state">Mood: {moods[moodIndex]}</span>
 					</div>
 				</div>
@@ -135,19 +137,19 @@
 
   const powerLevels = ['Off', 'Low', 'Medium', 'High', 'Maximum'];
   const moods = ['😢', '😐', '😊', '😍'];
-</script>
+<\/script>
 
-<!-- 5 options -->
 <MultiSwitch
   bind:selectedIndex={powerLevel}
   items={powerLevels}
-  shouldDisplayLabels={true} />
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />
 
-<!-- 4 emoji options -->
 <MultiSwitch
   bind:selectedIndex={mood}
   items={moods}
   shouldDisplayLabels={true}
+  labelRenderMode="block"
   size={60} />`}
 					languageType="svelte"
 				/>
@@ -157,15 +159,15 @@
 				<div class="prose">
 					<h4>Flexible Options</h4>
 					<p>
-						MultiSwitch works with 3 or more options. The component automatically
-						adjusts spacing and positioning.
+						MultiSwitch works with any number of items ≥ 2. The component automatically
+						adjusts spacing and stride math.
 					</p>
 					<h4>Content Types</h4>
 					<ul>
 						<li>Text labels</li>
 						<li>Emoji characters</li>
 						<li>Short abbreviations</li>
-						<li>Custom objects</li>
+						<li>Custom objects (with <code>labelMember</code> / <code>labelCallback</code> / <code>label</code> snippet)</li>
 					</ul>
 				</div>
 			{/snippet}
@@ -173,63 +175,69 @@
 
 		<!-- Size Variations -->
 		<ShowcaseSection
-			titleText="Size Variations"
-			subtitleText="Control the size for different use cases"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Size Guidelines">
+			titleText="MS03 Size Variations"
+			subtitleText="Numeric and named sizes"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Size Guidelines">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4 align-items-start">
 					<div class="switch-demo">
-						<span class="switch-label">Small (40px):</span>
+						<span class="switch-label">size=&#123;40&#125; (compact):</span>
 						<MultiSwitch
 							bind:selectedIndex={sizeDemoIndex}
 							items={sizes}
 							shouldDisplayLabels={true}
+							labelRenderMode="block"
 							size={40} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Default (50px):</span>
-						<MultiSwitch
-							bind:selectedIndex={sizeDemoIndex}
-							items={sizes}
-							shouldDisplayLabels={true} />
-					</div>
-					<div class="switch-demo">
-						<span class="switch-label">Large (70px):</span>
+						<span class="switch-label">size="md" (default):</span>
 						<MultiSwitch
 							bind:selectedIndex={sizeDemoIndex}
 							items={sizes}
 							shouldDisplayLabels={true}
+							labelRenderMode="block" />
+					</div>
+					<div class="switch-demo">
+						<span class="switch-label">size=&#123;70&#125; (large):</span>
+						<MultiSwitch
+							bind:selectedIndex={sizeDemoIndex}
+							items={sizes}
+							shouldDisplayLabels={true}
+							labelRenderMode="block"
 							size={70} />
 					</div>
 				</div>
 				<div class="mt-3">
-					<span class="switch-state">Selected size: {sizes[sizeDemoIndex]}</span>
+					<span class="switch-state">Selected: {sizes[sizeDemoIndex]}</span>
 				</div>
 			{/snippet}
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- Small switch -->
+					codeContent={`<!-- Compact -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
+  labelRenderMode="block"
   size={40} />
 
-<!-- Default size (50px) -->
-<MultiSwitch
-  bind:selectedIndex={selected}
-  items={options}
-  shouldDisplayLabels={true} />
-
-<!-- Large switch -->
+<!-- Default — 'md' = 35px -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
+  labelRenderMode="block" />
+
+<!-- Large -->
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={options}
+  shouldDisplayLabels={true}
+  labelRenderMode="block"
   size={70} />`}
 					languageType="svelte"
 				/>
@@ -239,48 +247,47 @@
 				<div class="prose">
 					<h4>Choosing Size</h4>
 					<ul>
-						<li><strong>Small (30-40px):</strong> Compact layouts, sidebars</li>
-						<li><strong>Default (50px):</strong> Most common use cases</li>
-						<li><strong>Large (60-80px):</strong> Touch interfaces, emphasis</li>
+						<li><strong>xs / sm:</strong> Sidebars, compact tables</li>
+						<li><strong>md (default):</strong> Forms — pure-admin aligned</li>
+						<li><strong>lg / xl or 60–80px:</strong> Touch targets, emphasis</li>
 					</ul>
 					<h4>Label Considerations</h4>
 					<p>
-						Larger switches provide more space for labels and better touch targets.
+						Larger switches give more room for labels and better touch targets. See the
+						<a href="/examples/sizes">Sizes</a> page for the full table.
 					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Orientation -->
+		<!-- Vertical Orientation -->
 		<ShowcaseSection
-			titleText="Vertical Orientation"
+			titleText="MS04 Vertical Orientation"
 			subtitleText="Vertical layout for space-constrained designs"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="When to Use">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="When to Use">
 
 			{#snippet demoContent()}
 				<div class="d-flex gap-5 justify-content-center">
 					<div class="text-center">
 						<div class="mb-3">Horizontal (default)</div>
-						<div style="padding-bottom: 2.5rem;">
-							<MultiSwitch
-								bind:selectedIndex={verticalMultiIndex}
-								items={powerLevels}
-								shouldDisplayLabels={true} />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={verticalMultiIndex}
+							items={powerLevels}
+							shouldDisplayLabels={true}
+							labelRenderMode="block" />
 					</div>
 					<div class="text-center">
 						<div class="mb-3">Vertical</div>
-						<div style="padding-right: 6rem;">
-							<MultiSwitch
-								bind:selectedIndex={verticalMultiIndex}
-								items={powerLevels}
-								shouldDisplayLabels={true}
-								orientation="vertical"
-								size={60}
-								labelPosition="right" />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={verticalMultiIndex}
+							items={powerLevels}
+							shouldDisplayLabels={true}
+							labelRenderMode="block"
+							orientation="vertical"
+							size={60}
+							labelPosition="right" />
 					</div>
 				</div>
 				<div class="text-center mt-3">
@@ -294,13 +301,15 @@
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
-  shouldDisplayLabels={true} />
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />
 
-<!-- Vertical orientation -->
+<!-- Vertical with right-side labels -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
+  labelRenderMode="block"
   orientation="vertical"
   size={60}
   labelPosition="right" />`}
@@ -315,12 +324,12 @@
 						<li>Saves horizontal space</li>
 						<li>Works well in sidebars</li>
 						<li>Good for mobile layouts</li>
-						<li>Creates visual hierarchy</li>
+						<li>Per-step labels become clickable buttons (when no <code>thumb</code> snippet)</li>
 					</ul>
 					<h4>Label Positioning</h4>
 					<p>
-						Consider using "right" or "left" label positions with vertical switches
-						for better readability.
+						Use <code>"right"</code> or <code>"left"</code> with vertical orientation.
+						<code>"top"</code> / <code>"bottom"</code> are ignored on vertical switches.
 					</p>
 				</div>
 			{/snippet}
@@ -328,59 +337,59 @@
 
 		<!-- Label Positioning -->
 		<ShowcaseSection
-			titleText="Label Positioning"
+			titleText="MS05 Label Positioning"
 			subtitleText="Control where labels appear relative to the switch"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Position Options">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Position Options">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
 					<div class="switch-demo">
 						<span class="switch-label">Labels on top:</span>
-						<div style="padding-top: 3rem;">
-							<MultiSwitch
-								bind:selectedIndex={noLabelsIndex}
-								items={basicOptions}
-								shouldDisplayLabels={true}
-								labelPosition="top" />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={noLabelsIndex}
+							items={basicOptions}
+							shouldDisplayLabels={true}
+							labelPosition="top"
+							labelRenderMode="block" />
 					</div>
 					<div class="switch-demo">
 						<span class="switch-label">Labels on bottom:</span>
-						<div style="padding-bottom: 2.5rem;">
-							<MultiSwitch
-								bind:selectedIndex={noLabelsIndex}
-								items={basicOptions}
-								shouldDisplayLabels={true}
-								labelPosition="bottom" />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={noLabelsIndex}
+							items={basicOptions}
+							shouldDisplayLabels={true}
+							labelPosition="bottom"
+							labelRenderMode="block" />
 					</div>
 					<div class="switch-demo">
 						<span class="switch-label">No labels:</span>
 						<MultiSwitch
-								bind:selectedIndex={noLabelsIndex}
-								items={basicOptions}
-								shouldDisplayLabels={false} />
+							bind:selectedIndex={noLabelsIndex}
+							items={basicOptions}
+							shouldDisplayLabels={false} />
 					</div>
 				</div>
 			{/snippet}
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- Labels on top -->
+					codeContent={`<!-- Top labels -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
-  labelPosition="top" />
+  labelPosition="top"
+  labelRenderMode="block" />
 
-<!-- Labels on bottom -->
+<!-- Bottom labels (default) -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
-  labelPosition="bottom" />
+  labelPosition="bottom"
+  labelRenderMode="block" />
 
 <!-- No labels -->
 <MultiSwitch
@@ -395,14 +404,15 @@
 				<div class="prose">
 					<h4>Available Positions</h4>
 					<ul>
-						<li><code>top</code> - Above the switch</li>
-						<li><code>bottom</code> - Below the switch (default)</li>
-						<li><code>left</code> - To the left (vertical only)</li>
-						<li><code>right</code> - To the right (vertical only)</li>
+						<li><code>top</code> — Above the switch</li>
+						<li><code>bottom</code> — Below the switch (default)</li>
+						<li><code>left</code> — To the left (vertical only)</li>
+						<li><code>right</code> — To the right (vertical only)</li>
 					</ul>
-					<h4>Design Tips</h4>
+					<h4>See also</h4>
 					<p>
-						Choose label position based on your layout constraints and visual hierarchy.
+						The <a href="/examples/labels">Labels</a> page has the full matrix and
+						covers <code>labelMember</code> / <code>labelCallback</code> for object items.
 					</p>
 				</div>
 			{/snippet}
@@ -410,23 +420,22 @@
 
 		<!-- Event Handling -->
 		<ShowcaseSection
-			titleText="Event Handling"
+			titleText="MS06 Event Handling"
 			subtitleText="Respond to selection changes"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Event Details">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Event Details">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-3">
 					<div class="switch-demo">
 						<span class="switch-label">Select option:</span>
-						<div style="padding-bottom: 2.5rem;">
-							<MultiSwitch
-								bind:selectedIndex={callbackIndex}
-								items={basicOptions}
-								shouldDisplayLabels={true}
-								onItemChange={handleSelectionChange} />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={callbackIndex}
+							items={basicOptions}
+							shouldDisplayLabels={true}
+							labelRenderMode="block"
+							onItemChange={handleSelectionChange} />
 						<span class="switch-state">Current: {basicOptions[callbackIndex]}</span>
 					</div>
 					{#if callbackMessage}
@@ -445,15 +454,15 @@
 
   const handleSelectionChange = (index) => {
     message = \`Selected: \${options[index]} (index \${index})\`;
-    // Perform additional actions
     console.log('Selection changed to:', index);
   };
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selectedIndex}
   items={options}
   shouldDisplayLabels={true}
+  labelRenderMode="block"
   onItemChange={handleSelectionChange} />`}
 					languageType="svelte"
 				/>
@@ -479,37 +488,36 @@
 
 		<!-- Custom Objects -->
 		<ShowcaseSection
-			titleText="Working with Custom Objects"
-			subtitleText="Using both children and labelTemplate with complex data"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Template Usage">
+			titleText="MS07 Working with Custom Objects"
+			subtitleText="Using the thumb and label snippets with object data"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Snippet Roles">
 
 			{#snippet demoContent()}
 				<div class="switch-demo">
 					<span class="switch-label">Skill level:</span>
-					<div style="padding-bottom: 4rem;">
-						<MultiSwitch
-							bind:selectedIndex={customLabelsIndex}
-							items={customOptions}
-							shouldDisplayLabels={true}
-							labelPosition="bottom"
-							size={60}>
+					<MultiSwitch
+						bind:selectedIndex={customLabelsIndex}
+						items={customOptions}
+						shouldDisplayLabels={true}
+						labelPosition="bottom"
+						labelRenderMode="block"
+						size={60}>
 
-							{#snippet children({ item, isSelected })}
-								<div class="text-center">
-									<div class="fw-bold small">{item?.name?.charAt(0) || ''}</div>
-								</div>
-							{/snippet}
+						{#snippet thumb({ index, item })}
+							<div class="text-center">
+								<div class="fw-bold small">{item?.name?.charAt(0) ?? ''}</div>
+							</div>
+						{/snippet}
 
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
-								<div class="text-center mt-2">
-									<div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</div>
-									<small class="text-muted">{item?.description || ''}</small>
-								</div>
-							{/snippet}
-						</MultiSwitch>
-					</div>
+						{#snippet label({ index, item, isSelected })}
+							<div class="text-center mt-2">
+								<div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</div>
+								<small class="text-muted">{item?.description ?? ''}</small>
+							</div>
+						{/snippet}
+					</MultiSwitch>
 				</div>
 			{/snippet}
 
@@ -522,24 +530,25 @@
     { name: 'Advanced', description: 'Highly skilled' },
     { name: 'Expert', description: 'Master level' }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
+  labelRenderMode="block"
   size={60}>
 
-  {#snippet children({ item, isSelected })}
+  {#snippet thumb({ index, item })}
     <div class="text-center">
-      <div class="fw-bold small">{item?.name?.charAt(0) || ''}</div>
+      <div class="fw-bold small">{item?.name?.charAt(0) ?? ''}</div>
     </div>
   {/snippet}
 
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  {#snippet label({ index, item, isSelected })}
     <div class="text-center mt-2">
-      <div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</div>
-      <small class="text-muted">{item?.description || ''}</small>
+      <div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</div>
+      <small class="text-muted">{item?.description ?? ''}</small>
     </div>
   {/snippet}
 </MultiSwitch>`}
@@ -549,20 +558,21 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Custom Object Support</h4>
+					<h4>v2.0 Snippet Split</h4>
 					<p>
-						When using complex objects, provide both <code>children</code> and
-						<code>labelTemplate</code> snippets to display different parts of your data.
+						The 1.x <code>children</code> snippet (which ran in BOTH the moving thumb and
+						each step background) was split in 2.0:
 					</p>
-					<h4>Template Roles</h4>
 					<ul>
-						<li><strong>children:</strong> Compact display in switch area (first letter)</li>
-						<li><strong>labelTemplate:</strong> Full details in labels (name + description)</li>
+						<li><strong>thumb</strong> — one render in the moving thumb (gets the active <code>item</code>)</li>
+						<li><strong>segment</strong> — one render per step background</li>
+						<li><strong>label</strong> — replaces 1.x <code>labelTemplate</code></li>
 					</ul>
-					<h4>Best Practices</h4>
+					<h4>Snippet Context</h4>
 					<p>
-						Keep switch content minimal and use labels for detailed information
-						to maintain readability and usability.
+						Context shape is unified: <code>&#123; index, item, isSelected &#125;</code>.
+						<code>thumb</code> omits <code>isSelected</code> (it's always true for the
+						moving thumb).
 					</p>
 				</div>
 			{/snippet}
@@ -575,20 +585,20 @@
 				<div class="col-md-4">
 					<div class="card text-center h-100">
 						<div class="card-body">
-							<div class="display-6 mb-3">🎨</div>
-							<h5>Styling</h5>
-							<p>Learn to customize colors and styles</p>
-							<a href="/examples/styling" class="btn btn-primary">Styling Guide</a>
+							<div class="display-6 mb-3">🏷️</div>
+							<h5>Labels</h5>
+							<p>labelMember, labelCallback, label snippet</p>
+							<a href="/examples/labels" class="btn btn-primary">Labels Guide</a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="card text-center h-100">
 						<div class="card-body">
-							<div class="display-6 mb-3">⚡</div>
-							<h5>Advanced</h5>
-							<p>Advanced features and techniques</p>
-							<a href="/examples/advanced" class="btn btn-outline-primary">Advanced Examples</a>
+							<div class="display-6 mb-3">🎨</div>
+							<h5>Styling</h5>
+							<p>Per-instance colors with itemStyles</p>
+							<a href="/examples/styling" class="btn btn-outline-primary">Styling Guide</a>
 						</div>
 					</div>
 				</div>

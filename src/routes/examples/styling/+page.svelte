@@ -2,7 +2,6 @@
 	import { DocLayout, ShowcaseSection, CodeBlock } from '@keenmate/svelte-docs';
 	import { Switch, MultiSwitch } from '@keenmate/svelte-switch';
 
-	// Demo states
 	let basicStyledSwitch = $state(false);
 	let customColorSwitch = $state(true);
 	let gradientSwitch = $state(false);
@@ -10,7 +9,6 @@
 	let styledMultiSwitch = $state(1);
 	let customMultiSwitch = $state(2);
 
-	// Style configurations
 	const redTheme = {
 		backgroundColor: '#ffebee',
 		thumbColor: '#f44336',
@@ -45,7 +43,6 @@
 	const priorityLevels = ['Low', 'Medium', 'High', 'Critical'];
 	const powerModes = ['Eco', 'Normal', 'Sport', 'Race'];
 
-	// Toggle function for theme demo
 	const toggleThemeSwitch = (index: number) => {
 		themedSwitches[index] = !themedSwitches[index];
 	};
@@ -53,16 +50,23 @@
 
 <DocLayout
 	titleText="Styling Examples"
-	descriptionText="Learn how to customize the appearance of switch components with colors, themes, and styles">
+	descriptionText="Per-instance colours via itemStyles, plus pointers to v2.0's full --base-* / --sw-* theming layer">
 
 	<div class="py-4">
+		<div class="alert alert-info">
+			<strong>Quick orientation.</strong> Per-instance one-off colours go through
+			<code>itemStyles</code> (this page). Cross-cutting brand themes go through
+			<code>--base-*</code> / <code>--sw-*</code> CSS variables — see the dedicated
+			<a href="/examples/theming">Theming</a> page.
+		</div>
+
 		<!-- Basic Color Customization -->
 		<ShowcaseSection
-			titleText="Color Customization"
-			subtitleText="Customize colors using itemStyles prop"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Color Properties">
+			titleText="ST01 Color Customization"
+			subtitleText="Customize a single switch's colours via itemStyles"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Color Properties">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
@@ -101,7 +105,7 @@
     thumbColor: '#4caf50',
     thumbBorderColor: '#388e3c'
   };
-</script>
+<\/script>
 
 <Switch
   bind:checked={isEnabled}
@@ -118,15 +122,20 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Available Style Properties</h4>
+					<h4>StepStyle Properties</h4>
 					<ul>
-						<li><code>backgroundColor</code> - Track background color</li>
-						<li><code>thumbColor</code> - Thumb (handle) color</li>
-						<li><code>thumbBorderColor</code> - Thumb border color</li>
+						<li><code>backgroundColor</code> — Track background colour</li>
+						<li><code>thumbColor</code> — Thumb (handle) colour</li>
+						<li><code>thumbBorderColor</code> — Thumb border colour</li>
 					</ul>
 					<h4>Color Formats</h4>
 					<p>
-						Use any valid CSS color format: hex, rgb, rgba, hsl, or named colors.
+						Any valid CSS colour: hex, rgb, rgba, hsl, named colours.
+					</p>
+					<h4>Resolution Order</h4>
+					<p>
+						Per-property: <code>itemStyles</code> data → <code>--sw-*</code> →
+						<code>--base-*</code> → fallback. <code>itemStyles</code> wins.
 					</p>
 				</div>
 			{/snippet}
@@ -134,11 +143,11 @@
 
 		<!-- Theme Collection -->
 		<ShowcaseSection
-			titleText="Pre-defined Themes"
-			subtitleText="Collection of ready-to-use color themes"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Theme Usage">
+			titleText="ST02 Pre-defined Themes"
+			subtitleText="Reusable itemStyles objects for consistent per-instance styling"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Pattern Notes">
 
 			{#snippet demoContent()}
 				<div class="row g-3">
@@ -148,8 +157,7 @@
 							<Switch
 								checked={themedSwitches[0]}
 								onToggle={() => toggleThemeSwitch(0)}
-								itemStyles={redTheme}
-								size={50} />
+								itemStyles={redTheme} />
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -158,8 +166,7 @@
 							<Switch
 								checked={themedSwitches[1]}
 								onToggle={() => toggleThemeSwitch(1)}
-								itemStyles={greenTheme}
-								size={50} />
+								itemStyles={greenTheme} />
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -168,8 +175,7 @@
 							<Switch
 								checked={themedSwitches[2]}
 								onToggle={() => toggleThemeSwitch(2)}
-								itemStyles={blueTheme}
-								size={50} />
+								itemStyles={blueTheme} />
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -178,8 +184,7 @@
 							<Switch
 								checked={themedSwitches[3]}
 								onToggle={() => toggleThemeSwitch(3)}
-								itemStyles={purpleTheme}
-								size={50} />
+								itemStyles={purpleTheme} />
 						</div>
 					</div>
 				</div>
@@ -188,26 +193,10 @@
 			{#snippet controlsContent()}
 				<CodeBlock
 					codeContent={`const themes = {
-  red: {
-    backgroundColor: '#ffebee',
-    thumbColor: '#f44336',
-    thumbBorderColor: '#d32f2f'
-  },
-  green: {
-    backgroundColor: '#e8f5e8',
-    thumbColor: '#4caf50',
-    thumbBorderColor: '#388e3c'
-  },
-  blue: {
-    backgroundColor: '#e3f2fd',
-    thumbColor: '#2196f3',
-    thumbBorderColor: '#1976d2'
-  },
-  purple: {
-    backgroundColor: '#f3e5f5',
-    thumbColor: '#9c27b0',
-    thumbBorderColor: '#7b1fa2'
-  }
+  red:    { backgroundColor: '#ffebee', thumbColor: '#f44336', thumbBorderColor: '#d32f2f' },
+  green:  { backgroundColor: '#e8f5e8', thumbColor: '#4caf50', thumbBorderColor: '#388e3c' },
+  blue:   { backgroundColor: '#e3f2fd', thumbColor: '#2196f3', thumbBorderColor: '#1976d2' },
+  purple: { backgroundColor: '#f3e5f5', thumbColor: '#9c27b0', thumbBorderColor: '#7b1fa2' }
 };
 
 <Switch itemStyles={themes.red} />
@@ -220,15 +209,13 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Consistent Design</h4>
+					<h4>When to use this pattern</h4>
 					<p>
-						Create a collection of themes to maintain consistent styling
-						across your application.
-					</p>
-					<h4>Material Design Colors</h4>
-					<p>
-						These examples use Material Design color palette for professional
-						appearance and accessibility.
+						This works for a small set of one-off colour treatments. For an entire app
+						theme — including non-switch components — use the
+						<a href="/examples/theming">--base-*</a> cascade instead. Setting
+						<code>--base-accent-color</code> on a parent themes every nested switch
+						(and every other KeenMate component) at once.
 					</p>
 				</div>
 			{/snippet}
@@ -236,11 +223,11 @@
 
 		<!-- MultiSwitch Styling -->
 		<ShowcaseSection
-			titleText="MultiSwitch Styling"
-			subtitleText="Individual styling for each option"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Per-Item Styling">
+			titleText="ST03 MultiSwitch Per-Step Styling"
+			subtitleText="Pass an array of styles, one per step"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Per-Item Styling">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
@@ -250,7 +237,8 @@
 							bind:selectedIndex={styledMultiSwitch}
 							items={priorityLevels}
 							itemStyles={multiSwitchStyles}
-							shouldDisplayLabels={false}
+							shouldDisplayLabels={true}
+							labelRenderMode="block"
 							size={60} />
 						<span class="switch-state">Priority: {priorityLevels[styledMultiSwitch]}</span>
 					</div>
@@ -260,8 +248,8 @@
 							bind:selectedIndex={customMultiSwitch}
 							items={powerModes}
 							itemStyles={multiSwitchStyles}
-							shouldDisplayLabels={false}
-							size={50} />
+							shouldDisplayLabels={true}
+							labelRenderMode="block" />
 						<span class="switch-state">Mode: {powerModes[customMultiSwitch]}</span>
 					</div>
 				</div>
@@ -274,20 +262,21 @@
 
   const priorityLevels = ['Low', 'Medium', 'High', 'Critical'];
 
+  // Array of styles — one per step
   const styles = [
     { backgroundColor: '#ffebee', thumbColor: '#f44336', thumbBorderColor: '#d32f2f' },
     { backgroundColor: '#fff3e0', thumbColor: '#ff9800', thumbBorderColor: '#f57c00' },
     { backgroundColor: '#e8f5e8', thumbColor: '#4caf50', thumbBorderColor: '#388e3c' },
     { backgroundColor: '#e3f2fd', thumbColor: '#2196f3', thumbBorderColor: '#1976d2' }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selectedIndex}
   items={priorityLevels}
   itemStyles={styles}
   shouldDisplayLabels={true}
-  labelPosition="bottom"
+  labelRenderMode="block"
   size={60} />`}
 					languageType="svelte"
 				/>
@@ -295,53 +284,53 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Array of Styles</h4>
+					<h4>Array vs Object</h4>
 					<p>
-						Pass an array of style objects to customize each option individually.
-						Each style corresponds to the option at the same index.
+						<code>itemStyles</code> accepts either an array (one StepStyle per step) or
+						a single StepStyle object (applied to every step).
 					</p>
 					<h4>Visual Hierarchy</h4>
 					<p>
-						Use different colors to create visual hierarchy and meaning
-						(e.g., red for critical, green for safe).
+						Use different colours to create meaning — red for critical, green for safe.
+						Priority-coloured switches communicate severity at a glance.
 					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Size Variations with Styling -->
+		<!-- Size + Style -->
 		<ShowcaseSection
-			titleText="Size and Style Combinations"
-			subtitleText="Combining different sizes with custom styling"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Design Tips">
+			titleText="ST04 Size and Style Combinations"
+			subtitleText="Combining sizes with custom styling"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Design Tips">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4 align-items-start">
 					<div class="switch-demo">
-						<span class="switch-label">Compact (40px):</span>
+						<span class="switch-label">size=&#123;40&#125;:</span>
 						<Switch
 							bind:checked={gradientSwitch}
 							itemStyles={blueTheme}
 							size={40} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Standard (60px):</span>
+						<span class="switch-label">size=&#123;60&#125;:</span>
 						<Switch
 							bind:checked={gradientSwitch}
 							itemStyles={blueTheme}
 							size={60} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Large (80px):</span>
+						<span class="switch-label">size=&#123;80&#125;:</span>
 						<Switch
 							bind:checked={gradientSwitch}
 							itemStyles={blueTheme}
 							size={80} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Vertical + Styled:</span>
+						<span class="switch-label">Vertical + size=&#123;100&#125;:</span>
 						<Switch
 							bind:checked={gradientSwitch}
 							itemStyles={purpleTheme}
@@ -359,7 +348,7 @@
   thumbBorderColor: '#1976d2'
 };
 
-<!-- Different sizes with same theme -->
+<!-- Same theme, different sizes -->
 <Switch itemStyles={theme} size={40} />
 <Switch itemStyles={theme} size={60} />
 <Switch itemStyles={theme} size={80} />
@@ -377,64 +366,79 @@
 				<div class="prose">
 					<h4>Scalable Styling</h4>
 					<p>
-						Custom styles work consistently across all sizes. The component
-						automatically scales colors and proportions.
+						Custom styles work consistently across all sizes. The component scales
+						colours and proportions automatically.
 					</p>
 					<h4>Responsive Design</h4>
 					<p>
-						Consider using different sizes for different screen sizes:
-						smaller for mobile, larger for touch interfaces.
+						Consider using different sizes for different screen sizes — smaller for
+						mobile, larger for touch interfaces. The named sizes
+						(<code>'sm'</code>...<code>'xl'</code>) work well in form contexts.
 					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- CSS Custom Properties -->
+		<!-- CSS Variables (v2.0) -->
 		<div class="mt-5">
-			<h2 class="mb-4">Advanced CSS Customization</h2>
+			<h2 class="mb-4">CSS Variable Customization (v2.0+)</h2>
 			<div class="row">
 				<div class="col-lg-6">
-					<h4>CSS Variables</h4>
-					<p>For more advanced styling, you can also use CSS custom properties:</p>
+					<h4>Per-instance overrides via <code>--sw-*</code></h4>
+					<p>
+						Set <code>--sw-*</code> variables in a <code>style=</code> attribute to
+						override one switch's colours without touching others.
+					</p>
 					<CodeBlock
-						codeContent={`:global(.custom-switch) {
-  --switch-track-bg: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-  --switch-thumb-color: #ffffff;
-  --switch-thumb-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  --switch-border-radius: 25px;
-  --switch-transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
+						codeContent={`<!-- Override one switch's thumb colour -->
+<Switch
+  bind:checked={isEnabled}
+  style="--sw-thumb-bg: cyan; --sw-bg-on: deeppink;" />
 
-.custom-switch:hover {
-  --switch-thumb-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}`}
-						languageType="css"
-						titleText="custom-styles.css"
+<!-- Override the focus ring colour -->
+<Switch
+  bind:checked={isEnabled}
+  style="--sw-focus-color: orange; --sw-focus-ring: 0 0 0 3px orange;" />
+
+<!-- Disable the bg-on accent flip and use neutral on/off -->
+<Switch
+  bind:checked={isEnabled}
+  style="--sw-bg-on: var(--sw-bg-off);" />`}
+						languageType="svelte"
+						titleText="Per-instance overrides"
 					/>
 				</div>
 				<div class="col-lg-6">
-					<h4>SCSS Mixins</h4>
-					<p>Create reusable styling mixins for consistent theming:</p>
+					<h4>App-wide theme via <code>--base-*</code></h4>
+					<p>
+						Set <code>--base-*</code> on a parent (or <code>:root</code>) and every
+						switch underneath picks up the theme. Same convention as web-multiselect /
+						web-daterangepicker.
+					</p>
 					<CodeBlock
-						codeContent={`@mixin switch-theme($primary, $secondary, $accent) {
-  .switch-theme {
-    --switch-track-bg: #{$secondary};
-    --switch-thumb-color: #{$primary};
-    --switch-thumb-border: #{$accent};
-
-    &.checked {
-      --switch-track-bg: #{$primary};
-      --switch-thumb-color: #{$secondary};
-    }
-  }
+						codeContent={`/* App-wide theme — one colour pass for all KeenMate components */
+:root {
+  --base-accent-color: #6366f1;
+  --base-primary-bg: #f3f4f6;
+  --base-text-color-on-accent: #ffffff;
+  --base-border-radius-sm: 1.2;  /* coefficient × --sw-rem */
+  --base-shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+  --base-font-size-sm: 1.4;
 }
 
-// Usage
-@include switch-theme(#3f51b5, #e8eaf6, #1a237e);`}
-						languageType="scss"
-						titleText="themes.scss"
+/* Scoped theme — only applies to .my-section descendants */
+.my-section {
+  --base-accent-color: #10b981;
+  --base-accent-color-light: #d1fae5;
+  --base-accent-color-light-hover: #a7f3d0;
+}`}
+						languageType="css"
+						titleText="App-wide theme"
 					/>
 				</div>
+			</div>
+			<div class="mt-3">
+				<a href="/examples/theming" class="btn btn-outline-primary">→ See full Theming guide with live presets</a>
 			</div>
 		</div>
 
@@ -445,15 +449,14 @@
 				<div class="col-md-6">
 					<div class="card h-100">
 						<div class="card-header">
-							<h5>🎨 Color Guidelines</h5>
+							<h5>🎨 When to use what</h5>
 						</div>
 						<div class="card-body">
-							<ul class="list-unstyled">
-								<li>✅ Ensure sufficient contrast for accessibility</li>
-								<li>✅ Use consistent color palette across your app</li>
-								<li>✅ Consider color-blind users</li>
-								<li>✅ Test colors in light and dark themes</li>
-								<li>✅ Follow your brand guidelines</li>
+							<ul class="list-unstyled mb-0">
+								<li>✅ <code>itemStyles</code> — single switch, ad-hoc colours</li>
+								<li>✅ <code>--sw-*</code> on a switch — single switch, theme-aware overrides</li>
+								<li>✅ <code>--base-*</code> on parent — app-wide branding</li>
+								<li>✅ All three combine via the resolution order</li>
 							</ul>
 						</div>
 					</div>
@@ -464,12 +467,11 @@
 							<h5>📐 Size Guidelines</h5>
 						</div>
 						<div class="card-body">
-							<ul class="list-unstyled">
-								<li>✅ Minimum 44px for touch interfaces</li>
-								<li>✅ Scale proportionally with text size</li>
-								<li>✅ Maintain aspect ratios</li>
+							<ul class="list-unstyled mb-0">
+								<li>✅ Default <code>'md'</code> aligns with pure-admin form heights</li>
+								<li>✅ Use named sizes for forms; numeric for one-off displays</li>
+								<li>✅ Minimum ~44px for touch interfaces</li>
 								<li>✅ Test on different screen densities</li>
-								<li>✅ Consider responsive breakpoints</li>
 							</ul>
 						</div>
 					</div>
@@ -484,10 +486,20 @@
 				<div class="col-md-4">
 					<div class="card text-center h-100">
 						<div class="card-body">
+							<div class="display-6 mb-3">🌈</div>
+							<h5>Theming</h5>
+							<p>Live --base-* / --sw-* playground</p>
+							<a href="/examples/theming" class="btn btn-primary">Theming</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card text-center h-100">
+						<div class="card-body">
 							<div class="display-6 mb-3">⚡</div>
-							<h5>Advanced Examples</h5>
-							<p>Custom templates and advanced features</p>
-							<a href="/examples/advanced" class="btn btn-primary">Advanced Guide</a>
+							<h5>Advanced</h5>
+							<p>Custom snippets and complex examples</p>
+							<a href="/examples/advanced" class="btn btn-outline-primary">Advanced</a>
 						</div>
 					</div>
 				</div>
@@ -496,18 +508,8 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">📚</div>
 							<h5>API Reference</h5>
-							<p>Complete documentation of all props</p>
+							<p>Complete documentation</p>
 							<a href="/api/switch" class="btn btn-outline-primary">API Docs</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="card text-center h-100">
-						<div class="card-body">
-							<div class="display-6 mb-3">🎮</div>
-							<h5>Playground</h5>
-							<p>Interactive styling playground</p>
-							<a href="/examples/advanced" class="btn btn-outline-primary">Advanced Examples</a>
 						</div>
 					</div>
 				</div>

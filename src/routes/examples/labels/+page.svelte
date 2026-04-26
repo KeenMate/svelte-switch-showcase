@@ -2,7 +2,6 @@
 	import { DocLayout, ShowcaseSection, CodeBlock } from '@keenmate/svelte-docs';
 	import { MultiSwitch } from '@keenmate/svelte-switch';
 
-	// Demo states
 	let basicLabelsIndex = $state(1);
 	let topLabelsIndex = $state(0);
 	let bottomLabelsIndex = $state(1);
@@ -19,7 +18,6 @@
 	let clickableLabelsIndex = $state(2);
 	let priorityDemoIndex = $state(1);
 
-	// Demo data
 	const basicOptions = ['Option A', 'Option B', 'Option C'];
 	const modes = ['Easy', 'Normal', 'Hard', 'Expert'];
 	const temperatures = ['Cold', 'Cool', 'Warm', 'Hot'];
@@ -37,7 +35,6 @@
 		{ label: 'Online', icon: '🟢', color: '#10b981' }
 	];
 
-	// New label features demo data
 	const productSizes = [
 		{ name: 'Small', code: 'S', price: 15 },
 		{ name: 'Medium', code: 'M', price: 20 },
@@ -58,7 +55,6 @@
 		{ city: 'Sydney', region: 'Australia', latency: 156 }
 	];
 
-	// Complex priority demo data
 	const complexItems = [
 		{ displayName: 'Custom Label', fallbackName: 'Fallback 1', id: 1 },
 		{ displayName: 'Another Label', fallbackName: 'Fallback 2', id: 2 },
@@ -68,116 +64,102 @@
 
 <DocLayout
 	titleText="Label Examples"
-	descriptionText="Learn how to customize and position labels for MultiSwitch components">
+	descriptionText="Customize and position labels for MultiSwitch components">
 
 	<div>
 		<!-- Label Positioning -->
 		<ShowcaseSection
-			titleText="Label Positioning"
+			titleText="LB01 Label Positioning"
 			subtitleText="Control where labels appear relative to the switch"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Position Guidelines">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Position Guidelines">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<!-- Top Labels -->
-					<div class="switch-demo" style="padding-top: 3rem;">
+					<div class="switch-demo">
 						<span class="switch-label">Top Labels:</span>
 						<MultiSwitch
 							bind:selectedIndex={topLabelsIndex}
 							items={modes}
 							shouldDisplayLabels={true}
 							labelPosition="top"
-							size={50} />
+							labelRenderMode="block" />
 					</div>
 
-					<!-- Bottom Labels (default) -->
-					<div class="switch-demo" style="padding-bottom: 2.5rem;">
+					<div class="switch-demo">
 						<span class="switch-label">Bottom Labels:</span>
 						<MultiSwitch
 							bind:selectedIndex={bottomLabelsIndex}
 							items={modes}
 							shouldDisplayLabels={true}
 							labelPosition="bottom"
-							size={50} />
+							labelRenderMode="block" />
 					</div>
 
-					<!-- Left Labels (vertical only) -->
 					<div class="switch-demo">
 						<span class="switch-label">Left Labels:</span>
-						<div style="padding-left: 5rem;">
-							<MultiSwitch
-								bind:selectedIndex={leftLabelsIndex}
-								items={temperatures}
-								shouldDisplayLabels={true}
-								labelPosition="left"
-								orientation="vertical"
-								size={60} />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={leftLabelsIndex}
+							items={temperatures}
+							shouldDisplayLabels={true}
+							labelPosition="left"
+							labelRenderMode="block"
+							orientation="vertical"
+							size={60} />
 					</div>
 
-					<!-- Right Labels (vertical only) -->
 					<div class="switch-demo">
 						<span class="switch-label">Right Labels:</span>
-						<div style="padding-right: 8rem;">
-							<MultiSwitch
-								bind:selectedIndex={rightLabelsIndex}
-								items={temperatures}
-								shouldDisplayLabels={true}
-								labelPosition="right"
-								orientation="vertical"
-								size={60} />
-						</div>
+						<MultiSwitch
+							bind:selectedIndex={rightLabelsIndex}
+							items={temperatures}
+							shouldDisplayLabels={true}
+							labelPosition="right"
+							labelRenderMode="block"
+							orientation="vertical"
+							size={60} />
 					</div>
 				</div>
 			{/snippet}
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- Top labels - add padding-top to container -->
-<div style="padding-top: 3rem;">
-  <MultiSwitch
-    bind:selectedIndex={selected}
-    items={options}
-    shouldDisplayLabels={true}
-    labelPosition="top"
-    size={50} />
-</div>
+					codeContent={`<!-- Top labels -->
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="top"
+  labelRenderMode="block" />
 
-<!-- Bottom labels - add padding-bottom to container -->
-<div style="padding-bottom: 2.5rem;">
-  <MultiSwitch
-    bind:selectedIndex={selected}
-    items={options}
-    shouldDisplayLabels={true}
-    labelPosition="bottom"
-    size={50} />
-</div>
+<!-- Bottom labels (default) -->
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="bottom"
+  labelRenderMode="block" />
 
-<!-- Left labels - wrap switch in padded container -->
-<span class="switch-label">Left Labels:</span>
-<div style="padding-left: 5rem;">
-  <MultiSwitch
-    bind:selectedIndex={selected}
-    items={options}
-    shouldDisplayLabels={true}
-    labelPosition="left"
-    orientation="vertical"
-    size={60} />
-</div>
+<!-- Left labels (vertical only) -->
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="left"
+  labelRenderMode="block"
+  orientation="vertical"
+  size={60} />
 
-<!-- Right labels - wrap switch in padded container -->
-<span class="switch-label">Right Labels:</span>
-<div style="padding-right: 8rem;">
-  <MultiSwitch
-    bind:selectedIndex={selected}
-    items={options}
-    shouldDisplayLabels={true}
-    labelPosition="right"
-    orientation="vertical"
-    size={60} />
-</div>`}
+<!-- Right labels (vertical only) -->
+<MultiSwitch
+  bind:selectedIndex={selected}
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="right"
+  labelRenderMode="block"
+  orientation="vertical"
+  size={60} />`}
 					languageType="svelte"
 				/>
 			{/snippet}
@@ -186,44 +168,40 @@
 				<div class="prose">
 					<h4>Position Options</h4>
 					<ul>
-						<li><code>top</code> - Above the switch (needs padding-top)</li>
-						<li><code>bottom</code> - Below the switch (needs padding-bottom)</li>
-						<li><code>left</code> - To the left (vertical only, needs padding-left)</li>
-						<li><code>right</code> - To the right (vertical only, needs padding-right)</li>
+						<li><code>top</code> — Above the switch</li>
+						<li><code>bottom</code> — Below the switch (default)</li>
+						<li><code>left</code> — To the left (vertical only)</li>
+						<li><code>right</code> — To the right (vertical only)</li>
 					</ul>
-					<h4>⚠️ Important: Spacing</h4>
+					<h4>💡 Tip: Block render mode</h4>
 					<p>
-						<strong>By default, labels are absolutely positioned</strong> and don't reserve space in the layout.
-						Add appropriate padding to the container in all directions to prevent overlap with other content.
-						Alternatively, use <code>labelRenderMode="block"</code> for automatic spacing.
+						All examples on this page use <code>labelRenderMode="block"</code>, which
+						reserves space for labels in document flow. This is the recommended mode for
+						most layouts.
 					</p>
-					<h4>Recommended Padding</h4>
-					<ul>
-						<li><strong>Top:</strong> 3rem padding-top</li>
-						<li><strong>Bottom:</strong> 2.5rem padding-bottom</li>
-						<li><strong>Left:</strong> 5rem padding-left</li>
-						<li><strong>Right:</strong> 6-8rem padding-right</li>
-					</ul>
+					<p>
+						<code>labelRenderMode="absolute"</code> is the legacy default — labels are
+						absolutely positioned and don't reserve space, requiring manual padding on
+						the container. See the next section for the comparison.
+					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
 		<!-- Label Render Mode -->
 		<ShowcaseSection
-			titleText="Label Render Mode"
+			titleText="LB02 Label Render Mode"
 			subtitleText="Choose between absolute and block positioning for labels"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Render Mode Comparison"
-			demoColumnHeight="500px">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Render Mode Comparison">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-3">
-					<!-- Absolute Mode (Default) -->
 					<div>
 						<h5 class="mb-3">Absolute Mode (Default)</h5>
 						<div class="border p-3 mb-2" style="background: #f8f9fa;">
-							<div class="text-muted mb-2">⚠️ Labels don't take up space - need manual padding</div>
+							<div class="text-muted mb-2">⚠️ Labels don't reserve space — manual padding needed</div>
 							<div class="switch-demo" style="padding-bottom: 2.5rem; background: white; border: 1px dashed #dee2e6;">
 								<span class="switch-label">Absolute:</span>
 								<MultiSwitch
@@ -234,13 +212,12 @@
 									labelRenderMode="absolute"
 									size={60} />
 							</div>
-							<div class="text-muted mt-2">Next element would overlap without padding!</div>
+							<div class="text-muted mt-2">Without padding-bottom, the next element overlaps the labels.</div>
 						</div>
 					</div>
 
-					<!-- Block Mode -->
 					<div>
-						<h5 class="mb-3">Block Mode (New)</h5>
+						<h5 class="mb-3">Block Mode</h5>
 						<div class="border p-3 mb-2" style="background: #f8f9fa;">
 							<div class="text-success mb-2">✅ Labels take up space automatically</div>
 							<div class="switch-demo" style="background: white; border: 1px dashed #dee2e6;">
@@ -253,16 +230,15 @@
 									labelRenderMode="block"
 									size={60} />
 							</div>
-							<div class="text-success mt-2">Next element flows naturally - no padding needed!</div>
+							<div class="text-success mt-2">Next element flows naturally, no padding needed.</div>
 						</div>
 					</div>
 
-					<!-- Block Mode with Vertical Orientation -->
 					<div>
-						<h5 class="mb-3">Block Mode - Vertical</h5>
+						<h5 class="mb-3">Block Mode — Vertical</h5>
 						<div class="d-flex gap-4">
 							<div class="border p-3" style="background: #f8f9fa;">
-								<div class="text-success mb-2">✅ Works great with vertical switches</div>
+								<div class="text-success mb-2">✅ Block — works with vertical too</div>
 								<MultiSwitch
 									bind:selectedIndex={blockModeVerticalIndex}
 									items={temperatures}
@@ -273,7 +249,7 @@
 									size={60} />
 							</div>
 							<div class="border p-3" style="background: #fff3cd;">
-								<div class="text-warning mb-2">⚠️ Absolute mode needs padding</div>
+								<div class="text-warning mb-2">⚠️ Absolute — needs padding</div>
 								<div style="padding-right: 4rem;">
 									<MultiSwitch
 										bind:selectedIndex={blockModeVerticalIndex}
@@ -292,7 +268,7 @@
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- Block mode - labels take up space automatically -->
+					codeContent={`<!-- Block mode — labels take up space automatically -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
@@ -301,7 +277,7 @@
   labelRenderMode="block"
   size={60} />
 
-<!-- Absolute mode (default) - needs manual padding -->
+<!-- Absolute mode (default) — needs manual padding -->
 <div style="padding-bottom: 2.5rem;">
   <MultiSwitch
     bind:selectedIndex={selected}
@@ -320,24 +296,7 @@
   labelPosition="right"
   labelRenderMode="block"
   orientation="vertical"
-  size={60} />
-
-<!-- Comparison: absolute vs block -->
-<div class="d-flex gap-4">
-  <!-- Block mode: no padding needed -->
-  <MultiSwitch
-    items={items}
-    labelRenderMode="block"
-    shouldDisplayLabels={true} />
-
-  <!-- Absolute mode: padding required -->
-  <div style="padding-bottom: 2rem;">
-    <MultiSwitch
-      items={items}
-      labelRenderMode="absolute"
-      shouldDisplayLabels={true} />
-  </div>
-</div>`}
+  size={60} />`}
 					languageType="svelte"
 				/>
 			{/snippet}
@@ -365,41 +324,29 @@
 							</ul>
 						</dd>
 					</dl>
-					<h4>When to Use Block Mode</h4>
-					<ul>
-						<li>Dynamic content where padding is hard to predict</li>
-						<li>Simpler layouts without overlapping elements</li>
-						<li>When you want automatic spacing</li>
-						<li>Responsive designs that adapt to content</li>
-					</ul>
-					<h4>When to Use Absolute Mode</h4>
-					<ul>
-						<li>Precise control over label positioning</li>
-						<li>Complex layouts with overlapping elements</li>
-						<li>Fixed-size components</li>
-						<li>Backwards compatibility (default behavior)</li>
-					</ul>
+					<h4>Recommendation</h4>
+					<p>
+						Use <code>block</code> for most layouts; reach for <code>absolute</code>
+						only when you need fixed-position label overlay (e.g., compact toolbars).
+					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Label Content Features (v1.4.0+) -->
+		<!-- Label Content Features -->
 		<ShowcaseSection
-			className="mt-3"
-			titleText="Label Content Features (v1.4.0+)"
-			subtitleText="Advanced label text handling with labelMember, labelCallback, and clickable labels"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Feature Details"
-			demoColumnHeight="600px">
+			titleText="LB03 Label Content (labelMember & labelCallback)"
+			subtitleText="Automatic label text from object items, plus clickable per-step labels"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Feature Details">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<!-- labelMember Demo -->
 					<div>
 						<h5 class="mb-3">1. labelMember Property</h5>
 						<div class="switch-demo">
-							<span class="switch-label">Product Sizes (using labelMember="name"):</span>
+							<span class="switch-label">Product Sizes (labelMember="name"):</span>
 							<MultiSwitch
 								bind:selectedIndex={labelMemberIndex}
 								items={productSizes}
@@ -411,15 +358,14 @@
 						</div>
 					</div>
 
-					<!-- labelCallback Demo -->
 					<div>
 						<h5 class="mb-3">2. labelCallback Function</h5>
 						<div class="switch-demo">
-							<span class="switch-label">Subscription Plans (using labelCallback):</span>
+							<span class="switch-label">Subscription Plans (labelCallback):</span>
 							<MultiSwitch
 								bind:selectedIndex={labelCallbackIndex}
 								items={subscriptionPlans}
-								labelCallback={(item, index) => `${item.tier} - $${item.monthlyPrice}/mo`}
+								labelCallback={(item, index) => `${item?.tier ?? ''} - $${item?.monthlyPrice ?? 0}/mo`}
 								shouldDisplayLabels={true}
 								labelPosition="bottom"
 								labelRenderMode="block"
@@ -427,11 +373,10 @@
 						</div>
 					</div>
 
-					<!-- Clickable Labels Demo -->
 					<div>
 						<h5 class="mb-3">3. Clickable Labels (Vertical Mode)</h5>
 						<div class="switch-demo">
-							<span class="switch-label">Server Locations (click labels to navigate):</span>
+							<span class="switch-label">Server Locations:</span>
 							<div class="d-flex gap-4 align-items-start">
 								<MultiSwitch
 									bind:selectedIndex={clickableLabelsIndex}
@@ -442,47 +387,44 @@
 									labelRenderMode="block"
 									orientation="vertical"
 									size={60} />
-								<div class="alert alert-info small">
-									<strong>💡 Try it:</strong> Click any city label to jump directly to that server!
-									<br><small class="text-muted">Labels are clickable in vertical mode when no thumbTemplate is used.</small>
+								<div class="alert alert-info small mb-0">
+									<strong>💡 Try it:</strong> Click any city label to jump directly to that server.
+									<br><small class="text-muted">Per-step labels become real <code>&lt;button&gt;</code>s when no <code>thumb</code> snippet is provided.</small>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<!-- Priority Demo -->
 					<div>
 						<h5 class="mb-3">4. Label Priority System</h5>
 						<div class="row g-3">
 							<div class="col-md-6">
 								<div class="switch-demo">
-									<small class="text-muted">Priority 1: labelMember</small>
+									<small class="text-muted">labelMember (highest priority)</small>
 									<MultiSwitch
 										bind:selectedIndex={priorityDemoIndex}
 										items={complexItems}
 										labelMember="displayName"
 										shouldDisplayLabels={true}
 										labelPosition="bottom"
-										labelRenderMode="block"
-										size={50} />
+										labelRenderMode="block" />
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="switch-demo">
-									<small class="text-muted">Priority 2: labelCallback (if no labelMember)</small>
+									<small class="text-muted">labelCallback (when no labelMember)</small>
 									<MultiSwitch
 										bind:selectedIndex={priorityDemoIndex}
 										items={complexItems}
-										labelCallback={(item, index) => `Computed: ${item.fallbackName}`}
+										labelCallback={(item, index) => `Computed: ${item?.fallbackName ?? ''}`}
 										shouldDisplayLabels={true}
 										labelPosition="bottom"
-										labelRenderMode="block"
-										size={50} />
+										labelRenderMode="block" />
 								</div>
 							</div>
 						</div>
 						<div class="mt-2">
-							<small class="text-muted">Without either property: defaults to "Option 1", "Option 2", etc.</small>
+							<small class="text-muted">Without either: defaults to "Option 1", "Option 2", etc.</small>
 						</div>
 					</div>
 				</div>
@@ -491,7 +433,6 @@
 			{#snippet controlsContent()}
 				<CodeBlock
 					codeContent={`<script>
-  // Sample data structures
   const productSizes = [
     { name: 'Small', code: 'S', price: 15 },
     { name: 'Medium', code: 'M', price: 20 },
@@ -510,7 +451,7 @@
     { city: 'London', region: 'Europe', latency: 45 },
     { city: 'Tokyo', region: 'Asia Pacific', latency: 89 }
   ];
-</script>
+<\/script>
 
 <!-- 1. labelMember: Extract text from object property -->
 <MultiSwitch
@@ -520,7 +461,7 @@
   shouldDisplayLabels={true}
   labelRenderMode="block" />
 
-<!-- 2. labelCallback: Custom function with item access -->
+<!-- 2. labelCallback: Custom function -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={subscriptionPlans}
@@ -539,9 +480,9 @@
   labelRenderMode="block" />
 
 <!-- Label priority (highest to lowest):
-  1. labelMember (if property exists on item)
-  2. labelCallback (if function provided)
-  3. labelTemplate (complete custom control)
+  1. label snippet (full custom rendering)
+  2. labelMember (object property)
+  3. labelCallback (computed string)
   4. Default: "Option 1", "Option 2", etc.
 -->`}
 					languageType="svelte"
@@ -550,63 +491,51 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>New in v1.4.0</h4>
-					<p>Enhanced label system with automatic text extraction and interactive features.</p>
+					<h4>Object-aware label resolution</h4>
+					<p>Both ways read structured data without writing a snippet.</p>
 
-					<h4>1. labelMember Property</h4>
+					<h4>1. labelMember</h4>
 					<ul>
-						<li>Extracts label text from object property</li>
+						<li>Extracts label text from an item property</li>
 						<li>Example: <code>labelMember="name"</code> reads <code>item.name</code></li>
-						<li>Perfect for arrays of objects</li>
 						<li>Null-safe: skips if property doesn't exist</li>
 					</ul>
 
-					<h4>2. labelCallback Function</h4>
+					<h4>2. labelCallback</h4>
 					<ul>
-						<li>Custom function: <code>(item: any, index: number) => string</code></li>
+						<li>Custom function: <code>(item: T, index: number) =&gt; string</code></li>
 						<li>Access to both item data and index</li>
-						<li>Ideal for computed labels or formatting</li>
-						<li>Can combine multiple object properties</li>
+						<li>Ideal for computed or formatted labels</li>
 					</ul>
 
 					<h4>3. Clickable Labels</h4>
 					<ul>
-						<li>Available in vertical orientation with left/right positions</li>
-						<li>Only active when no <code>thumbTemplate</code> is defined</li>
-						<li>Click any label to jump directly to that option</li>
-						<li>Visual hover effects indicate interactivity</li>
+						<li>Available in vertical mode with left/right positions</li>
+						<li>Active when no <code>thumb</code> snippet is provided</li>
+						<li>Renders real <code>&lt;button&gt;</code> elements with keyboard activation</li>
 					</ul>
 
-					<h4>Label Priority System</h4>
+					<h4>Label Priority</h4>
 					<ol>
-						<li><strong>labelMember</strong> - Object property extraction</li>
-						<li><strong>labelCallback</strong> - Custom function</li>
-						<li><strong>labelTemplate</strong> - Full custom rendering</li>
-						<li><strong>Default</strong> - "Option 1", "Option 2", etc.</li>
+						<li><code>label</code> snippet (full custom)</li>
+						<li><code>labelMember</code> (object property)</li>
+						<li><code>labelCallback</code> (computed string)</li>
+						<li>Default: "Option N"</li>
 					</ol>
-
-					<h4>Best Practices</h4>
-					<ul>
-						<li>Use <code>labelMember</code> for simple object properties</li>
-						<li>Use <code>labelCallback</code> for computed or formatted text</li>
-						<li>Use <code>labelTemplate</code> for rich content (HTML, styling)</li>
-						<li>Combine with <code>labelRenderMode="block"</code> for easier layouts</li>
-					</ul>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Custom Label Templates -->
+		<!-- Custom Label Snippet -->
 		<ShowcaseSection
-			titleText="Custom Label Templates"
-			subtitleText="Rich label content with custom templates"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Template Features">
+			titleText="LB04 Custom label snippet"
+			subtitleText="Rich label content via the label snippet (renamed from labelTemplate in 2.0)"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Snippet Features">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<!-- Quality Settings with custom labels -->
 					<div class="switch-demo">
 						<span class="switch-label">Quality Settings:</span>
 						<MultiSwitch
@@ -615,20 +544,20 @@
 							size={60}
 							shouldDisplayLabels={true}
 							labelPosition="right"
+							labelRenderMode="block"
 							orientation="vertical">
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+							{#snippet label({ index, item, isSelected })}
 								<div class="ms-3 d-flex align-items-center gap-2">
-									<span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</span>
+									<span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</span>
 									<span class="small text-muted">•</span>
-									<span class="small text-muted">{item?.resolution || ''}</span>
+									<span class="small text-muted">{item?.resolution ?? ''}</span>
 									<span class="small text-muted">•</span>
-									<span class="small text-muted" style="opacity: 0.7">{item?.size || ''}</span>
+									<span class="small text-muted" style="opacity: 0.7">{item?.size ?? ''}</span>
 								</div>
 							{/snippet}
 						</MultiSwitch>
 					</div>
 
-					<!-- Status with colored labels -->
 					<div class="switch-demo">
 						<span class="switch-label">System Status:</span>
 						<MultiSwitch
@@ -636,13 +565,14 @@
 							items={statusOptions}
 							size={70}
 							shouldDisplayLabels={true}
-							labelPosition="bottom">
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+							labelPosition="bottom"
+							labelRenderMode="block">
+							{#snippet label({ index, item, isSelected })}
 								<div class="text-center mt-2">
 									<div class="d-flex align-items-center justify-content-center gap-1">
-										<span>{item?.icon || ''}</span>
+										<span>{item?.icon ?? ''}</span>
 										<span class="fw-bold" style="color: {isSelected ? item?.color : '#6b7280'}">
-											{item?.label || ''}
+											{item?.label ?? ''}
 										</span>
 									</div>
 									{#if isSelected}
@@ -673,7 +603,7 @@
     { label: 'Connecting', icon: '🟡', color: '#f59e0b' },
     { label: 'Online', icon: '🟢', color: '#10b981' }
   ];
-</script>
+<\/script>
 
 <!-- Quality with detailed info -->
 <MultiSwitch
@@ -682,17 +612,18 @@
   size={60}
   shouldDisplayLabels={true}
   labelPosition="right"
+  labelRenderMode="block"
   orientation="vertical">
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  {#snippet label({ index, item, isSelected })}
     <div class="ms-3 d-flex align-items-center gap-2">
       <span class="fw-bold {isSelected ? 'text-primary' : ''}">
-        {item?.name || ''}
+        {item?.name ?? ''}
       </span>
       <span class="small text-muted">•</span>
-      <span class="small text-muted">{item?.resolution || ''}</span>
+      <span class="small text-muted">{item?.resolution ?? ''}</span>
       <span class="small text-muted">•</span>
       <span class="small text-muted" style="opacity: 0.7">
-        {item?.size || ''}
+        {item?.size ?? ''}
       </span>
     </div>
   {/snippet}
@@ -703,13 +634,13 @@
   bind:selectedIndex={statusIndex}
   items={statusOptions}
   shouldDisplayLabels={true}
-  labelPosition="bottom">
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  labelRenderMode="block">
+  {#snippet label({ index, item, isSelected })}
     <div class="text-center mt-2">
       <div class="d-flex align-items-center justify-content-center gap-1">
-        <span>{item?.icon || ''}</span>
+        <span>{item?.icon ?? ''}</span>
         <span class="fw-bold" style="color: {isSelected ? item?.color : '#6b7280'}">
-          {item?.label || ''}
+          {item?.label ?? ''}
         </span>
       </div>
       {#if isSelected}
@@ -724,23 +655,23 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>labelTemplate Snippet</h4>
+					<h4>label snippet (v2.0)</h4>
 					<p>
-						The <code>labelTemplate</code> snippet allows complete customization
-						of how labels are rendered for each option.
+						The <code>label</code> snippet (renamed from 1.x's <code>labelTemplate</code>)
+						gives full control over per-item label rendering.
 					</p>
-					<h4>Template Parameters</h4>
+					<h4>Snippet Parameters</h4>
 					<ul>
-						<li><code>currentIndex</code> - Index of this item</li>
-						<li><code>item</code> - The item data object</li>
-						<li><code>isSelected</code> - Boolean for selection state</li>
+						<li><code>index</code> — Index of this item (was <code>currentIndex</code>)</li>
+						<li><code>item</code> — The item data (typed as <code>T | undefined</code>)</li>
+						<li><code>isSelected</code> — Boolean for selection state</li>
 					</ul>
-					<h4>Use Cases</h4>
+					<h4>When to Use</h4>
 					<ul>
 						<li>Multi-line labels with descriptions</li>
 						<li>Icons with text</li>
 						<li>Conditional content based on selection</li>
-						<li>Custom styling and colors</li>
+						<li>Custom styling per state</li>
 					</ul>
 				</div>
 			{/snippet}
@@ -748,11 +679,11 @@
 
 		<!-- Show/Hide Labels -->
 		<ShowcaseSection
-			titleText="Label Visibility"
+			titleText="LB05 Label Visibility"
 			subtitleText="Control when to show or hide labels"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Visibility Guidelines">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Visibility Guidelines">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
@@ -762,26 +693,25 @@
 							bind:selectedIndex={basicLabelsIndex}
 							items={basicOptions}
 							shouldDisplayLabels={true}
-							size={50} />
-						</div>
+							labelRenderMode="block" />
+					</div>
 
 					<div class="switch-demo">
 						<span class="switch-label">Without Labels:</span>
 						<MultiSwitch
 							bind:selectedIndex={noLabelsIndex}
 							items={basicOptions}
-							shouldDisplayLabels={false}
-							size={50} />
-						</div>
+							shouldDisplayLabels={false} />
+					</div>
 
 					<div class="switch-demo">
-						<span class="switch-label">Icons Only:</span>
+						<span class="switch-label">Icons Only (segment snippet):</span>
 						<MultiSwitch
 							bind:selectedIndex={noLabelsIndex}
 							items={['👍', '👎', '🤷']}
 							shouldDisplayLabels={false}
 							size={60}>
-							{#snippet children({ currentIndex, item, isSelected })}
+							{#snippet segment({ index, item })}
 								<div class="text-center fs-4">
 									{item}
 								</div>
@@ -793,27 +723,26 @@
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- With labels (default) -->
+					codeContent={`<!-- With labels -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
   shouldDisplayLabels={true}
-  size={50} />
+  labelRenderMode="block" />
 
 <!-- Without labels -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
-  shouldDisplayLabels={false}
-  size={50} />
+  shouldDisplayLabels={false} />
 
-<!-- Icons only, no labels -->
+<!-- Icons in each segment background, no labels -->
 <MultiSwitch
   bind:selectedIndex={selected}
   items={['👍', '👎', '🤷']}
   shouldDisplayLabels={false}
   size={60}>
-  {#snippet children({ currentIndex, item, isSelected })}
+  {#snippet segment({ index, item })}
     <div class="text-center fs-4">
       {item}
     </div>
@@ -832,10 +761,11 @@
 						<li>In compact UI designs</li>
 						<li>When labels are shown elsewhere</li>
 					</ul>
-					<h4>Accessibility Note</h4>
+					<h4>Note: segment vs thumb</h4>
 					<p>
-						When hiding labels, ensure the options are still understandable
-						through context, tooltips, or nearby text.
+						The icons example uses the <code>segment</code> snippet — it renders once
+						per step background. Use <code>thumb</code> instead if you only want content
+						inside the moving thumb.
 					</p>
 				</div>
 			{/snippet}
@@ -864,15 +794,15 @@
 				<div class="col-md-6">
 					<div class="card h-100">
 						<div class="card-header">
-							<h5>🎯 Positioning Tips</h5>
+							<h5>🎯 Layout Tips</h5>
 						</div>
 						<div class="card-body">
 							<ul class="list-unstyled">
-								<li>✅ Add padding for top/left positions</li>
-								<li>✅ Consider viewport constraints</li>
-								<li>✅ Test on different screen sizes</li>
-								<li>✅ Match position to layout flow</li>
-								<li>✅ Be consistent across your app</li>
+								<li>✅ Default to <code>labelRenderMode="block"</code></li>
+								<li>✅ Reach for <code>"absolute"</code> only when needed</li>
+								<li>✅ Use <code>labelMember</code> for simple object items</li>
+								<li>✅ Use <code>labelCallback</code> for computed strings</li>
+								<li>✅ Use the <code>label</code> snippet for rich content</li>
 							</ul>
 						</div>
 					</div>
@@ -889,7 +819,7 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">🎨</div>
 							<h5>Styling</h5>
-							<p>Customize colors and appearance</p>
+							<p>Per-instance colors with itemStyles</p>
 							<a href="/examples/styling" class="btn btn-primary">Styling Examples</a>
 						</div>
 					</div>
@@ -897,10 +827,10 @@
 				<div class="col-md-4">
 					<div class="card text-center h-100">
 						<div class="card-body">
-							<div class="display-6 mb-3">⚡</div>
-							<h5>Advanced</h5>
-							<p>Templates and complex features</p>
-							<a href="/examples/advanced" class="btn btn-outline-primary">Advanced Examples</a>
+							<div class="display-6 mb-3">🌈</div>
+							<h5>Theming</h5>
+							<p>Cross-library --base-* cascade</p>
+							<a href="/examples/theming" class="btn btn-outline-primary">Theming Guide</a>
 						</div>
 					</div>
 				</div>

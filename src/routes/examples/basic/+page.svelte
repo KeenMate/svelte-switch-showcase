@@ -2,9 +2,9 @@
 	import { DocLayout, ShowcaseSection, CodeBlock } from '@keenmate/svelte-docs';
 	import { Switch } from '@keenmate/svelte-switch';
 
-	// Demo states
 	let basicSwitch = $state(false);
 	let sizedSwitch = $state(true);
+	let namedSizeSwitch = $state(true);
 	let disabledSwitch = $state(false);
 	let disabledCheckedSwitch = $state(true);
 	let verticalSwitch = $state(false);
@@ -23,11 +23,11 @@
 	<div class="py-4">
 		<!-- Basic Usage -->
 		<ShowcaseSection
-			titleText="Basic Usage"
+			titleText="BS01 Basic Usage"
 			subtitleText="Simple on/off switch with state binding"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Explanation">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Explanation">
 
 			{#snippet demoContent()}
 				<div class="switch-demo">
@@ -43,7 +43,7 @@
   import { Switch } from '@keenmate/svelte-switch';
 
   let isEnabled = $state(false);
-</script>
+<\/script>
 
 <Switch bind:checked={isEnabled} />
 <p>State: {isEnabled ? 'ON' : 'OFF'}</p>`}
@@ -60,33 +60,39 @@
 					</p>
 					<h4>Reactive State</h4>
 					<p>
-						The switch automatically updates when the bound variable changes, and
-						vice versa.
+						The switch reflects changes to the bound variable instantly, and updates
+						the variable when toggled by the user.
+					</p>
+					<h4>Default On-State</h4>
+					<p>
+						In v2.0 the on-state surface picks up <code>--base-accent-color</code> via
+						<code>--sw-bg-on</code>. Override either to change the colour without
+						touching the off-state.
 					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Size Customization -->
+		<!-- Numeric size -->
 		<ShowcaseSection
-			titleText="Size Customization"
-			subtitleText="Control the size of your switches"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Size Guidelines">
+			titleText="BS02 Numeric Size"
+			subtitleText="Control the height with explicit pixel values"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Notes">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-3">
 					<div class="switch-demo">
-						<span class="switch-label">Small (30px):</span>
+						<span class="switch-label">size=&#123;30&#125;:</span>
 						<Switch bind:checked={sizedSwitch} size={30} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Default (50px):</span>
-						<Switch bind:checked={sizedSwitch} />
+						<span class="switch-label">size=&#123;50&#125;:</span>
+						<Switch bind:checked={sizedSwitch} size={50} />
 					</div>
 					<div class="switch-demo">
-						<span class="switch-label">Large (80px):</span>
+						<span class="switch-label">size=&#123;80&#125;:</span>
 						<Switch bind:checked={sizedSwitch} size={80} />
 					</div>
 				</div>
@@ -94,13 +100,9 @@
 
 			{#snippet controlsContent()}
 				<CodeBlock
-					codeContent={`<!-- Small switch -->
+					codeContent={`<!-- Numeric size in pixels -->
 <Switch bind:checked={isEnabled} size={30} />
-
-<!-- Default size (50px) -->
-<Switch bind:checked={isEnabled} />
-
-<!-- Large switch -->
+<Switch bind:checked={isEnabled} size={50} />
 <Switch bind:checked={isEnabled} size={80} />`}
 					languageType="svelte"
 				/>
@@ -108,15 +110,84 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Size Property</h4>
+					<h4>How Numeric Sizing Works</h4>
 					<p>
-						The <code>size</code> prop controls the height (and width for square switches)
-						in pixels.
+						A numeric <code>size</code> sets <code>--scale = size / 50</code>. So
+						<code>size=&#123;50&#125;</code> renders the natural 32px height,
+						<code>size=&#123;80&#125;</code> scales it to ~51px, and so on.
 					</p>
-					<h4>Responsive Design</h4>
+					<h4>When to Use Numeric</h4>
 					<p>
-						Consider using CSS media queries or responsive size values for
-						different screen sizes.
+						Use numeric size for one-off displays where you need an exact pixel value.
+						For form-aligned defaults, use named sizes instead (next section).
+					</p>
+				</div>
+			{/snippet}
+		</ShowcaseSection>
+
+		<!-- Named sizes (new in v2.0) -->
+		<ShowcaseSection
+			titleText="BS03 Named Sizes (v2.0+)"
+			subtitleText="xs / sm / md / lg / xl aligned to pure-admin form heights"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Why named sizes">
+
+			{#snippet demoContent()}
+				<div class="d-flex flex-column gap-3">
+					<div class="switch-demo">
+						<span class="switch-label">size="xs" (31px):</span>
+						<Switch bind:checked={namedSizeSwitch} size="xs" />
+					</div>
+					<div class="switch-demo">
+						<span class="switch-label">size="sm" (33px):</span>
+						<Switch bind:checked={namedSizeSwitch} size="sm" />
+					</div>
+					<div class="switch-demo">
+						<span class="switch-label">size="md" — default (35px):</span>
+						<Switch bind:checked={namedSizeSwitch} size="md" />
+					</div>
+					<div class="switch-demo">
+						<span class="switch-label">size="lg" (38px):</span>
+						<Switch bind:checked={namedSizeSwitch} size="lg" />
+					</div>
+					<div class="switch-demo">
+						<span class="switch-label">size="xl" (41px):</span>
+						<Switch bind:checked={namedSizeSwitch} size="xl" />
+					</div>
+				</div>
+			{/snippet}
+
+			{#snippet controlsContent()}
+				<CodeBlock
+					codeContent={`<!-- Named sizes match pure-admin form heights -->
+<Switch bind:checked={value} size="xs" />  <!-- 31px -->
+<Switch bind:checked={value} size="sm" />  <!-- 33px -->
+<Switch bind:checked={value} size="md" />  <!-- 35px (default) -->
+<Switch bind:checked={value} size="lg" />  <!-- 38px -->
+<Switch bind:checked={value} size="xl" />  <!-- 41px -->`}
+					languageType="svelte"
+				/>
+			{/snippet}
+
+			{#snippet descriptionContent()}
+				<div class="prose">
+					<h4>Form-Aligned Defaults</h4>
+					<p>
+						<code>'md'</code> is now the default size — switches drop into pure-admin
+						forms next to inputs without per-instance config.
+					</p>
+					<h4>Themable Heights</h4>
+					<p>
+						Each named size resolves through
+						<code>--base-input-size-&#123;name&#125;-height</code>, so a parent with
+						<code>--base-input-size-md-height: 4.0</code> rescales every default
+						switch underneath.
+					</p>
+					<h4>See also</h4>
+					<p>
+						The <a href="/examples/sizes">Sizes</a> page has the full table and
+						pure-admin integration recipe.
 					</p>
 				</div>
 			{/snippet}
@@ -124,11 +195,11 @@
 
 		<!-- Disabled State -->
 		<ShowcaseSection
-			titleText="Disabled State"
+			titleText="BS04 Disabled State"
 			subtitleText="Prevent user interaction when needed"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Use Cases">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Use Cases">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-3">
@@ -150,14 +221,12 @@
 					codeContent={`<script>
   let isEnabled = $state(false);
   let isReadonly = $state(true);
-</script>
+<\/script>
 
-<!-- Disabled switch (off) -->
 <Switch
   bind:checked={isEnabled}
   isDisabled={true} />
 
-<!-- Disabled switch (on) -->
 <Switch
   bind:checked={isReadonly}
   isDisabled={true} />`}
@@ -176,8 +245,8 @@
 					</ul>
 					<h4>Accessibility</h4>
 					<p>
-						Disabled switches are properly marked with ARIA attributes
-						for screen readers.
+						Disabled switches are properly marked with ARIA attributes for screen readers
+						and skip focus order.
 					</p>
 				</div>
 			{/snippet}
@@ -185,11 +254,11 @@
 
 		<!-- Orientation -->
 		<ShowcaseSection
-			titleText="Orientation"
-			subtitleText="Horizontal or vertical layout options"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Design Guidelines">
+			titleText="BS05 Orientation"
+			subtitleText="Horizontal or vertical layout"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Design Guidelines">
 
 			{#snippet demoContent()}
 				<div class="d-flex gap-4 align-items-center">
@@ -212,7 +281,7 @@
 					codeContent={`<!-- Horizontal (default) -->
 <Switch bind:checked={isEnabled} />
 
-<!-- Vertical orientation -->
+<!-- Vertical -->
 <Switch
   bind:checked={isEnabled}
   orientation="vertical"
@@ -225,13 +294,13 @@
 				<div class="prose">
 					<h4>Layout Considerations</h4>
 					<p>
-						Vertical switches work well in compact layouts or when
-						you need to save horizontal space.
+						Vertical switches work well in compact layouts or when you need to save
+						horizontal space.
 					</p>
 					<h4>Size Recommendations</h4>
 					<p>
-						Consider using larger sizes for vertical switches to maintain
-						good usability and visual balance.
+						Vertical switches benefit from larger sizes for usability — consider a
+						numeric size of 60–100px or use <code>'lg'</code> / <code>'xl'</code>.
 					</p>
 				</div>
 			{/snippet}
@@ -239,11 +308,11 @@
 
 		<!-- Event Handling -->
 		<ShowcaseSection
-			titleText="Event Handling"
+			titleText="BS06 Event Handling"
 			subtitleText="Respond to switch state changes"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Event Details">
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Event Details">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-3">
@@ -268,10 +337,9 @@
 
   const handleToggle = (checked) => {
     message = \`Switch toggled to: \${checked ? 'ON' : 'OFF'}\`;
-    // Perform additional actions
     console.log('Switch changed:', checked);
   };
-</script>
+<\/script>
 
 <Switch
   bind:checked={isEnabled}
@@ -285,7 +353,7 @@
 					<h4>onToggle Callback</h4>
 					<p>
 						The <code>onToggle</code> prop accepts a function that receives
-						the new state value.
+						the new state value as its only argument.
 					</p>
 					<h4>Common Use Cases</h4>
 					<ul>
@@ -317,7 +385,7 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">🎨</div>
 							<h5>Styling</h5>
-							<p>Customize colors and appearance</p>
+							<p>Customize per-instance colors</p>
 							<a href="/examples/styling" class="btn btn-outline-primary">Styling Guide</a>
 						</div>
 					</div>
@@ -327,7 +395,7 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">⚡</div>
 							<h5>Advanced</h5>
-							<p>Advanced features and techniques</p>
+							<p>Advanced features and snippets</p>
 							<a href="/examples/advanced" class="btn btn-outline-primary">Advanced Examples</a>
 						</div>
 					</div>

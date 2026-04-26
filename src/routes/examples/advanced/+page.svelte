@@ -2,16 +2,15 @@
 	import { DocLayout, ShowcaseSection, CodeBlock } from '@keenmate/svelte-docs';
 	import { Switch, MultiSwitch } from '@keenmate/svelte-switch';
 
-	// Demo states
 	let customThumbSwitch = $state(true);
 	let iconSwitchState = $state(false);
 	let customLabelMulti = $state(1);
-	let customChildrenMulti = $state(2);
-	let customThumbMulti = $state(0);
-	let complexTemplateMulti = $state(1);
+	let customSegmentMulti = $state(2);
+	let mediaThumbMulti = $state(0);
+	let themeMulti = $state(1);
+	let qualityMulti = $state(1);
 	let disabledThumbSwitch = $state(false);
 
-	// Data for examples
 	const statusLevels = [
 		{ name: 'Offline', icon: '🔴', description: 'Service unavailable' },
 		{ name: 'Warning', icon: '🟡', description: 'Limited functionality' },
@@ -38,29 +37,47 @@
 		{ name: 'High', resolution: '1080p', size: '~1GB' },
 		{ name: 'Ultra', resolution: '4K', size: '~4GB' }
 	];
+
+	const themeOptions = [
+		{ name: 'Light', icon: '☀️', bg: '#ffffff', text: '#000000' },
+		{ name: 'Dark', icon: '🌙', bg: '#1a1a1a', text: '#ffffff' },
+		{ name: 'Auto', icon: '🔄', bg: '#6366f1', text: '#ffffff' }
+	];
+
+	const themeStyles = [
+		{ backgroundColor: '#f8fafc', thumbColor: '#fbbf24', thumbBorderColor: '#f59e0b' },
+		{ backgroundColor: '#1e293b', thumbColor: '#64748b', thumbBorderColor: '#475569' },
+		{ backgroundColor: '#e0e7ff', thumbColor: '#6366f1', thumbBorderColor: '#4f46e5' }
+	];
 </script>
 
 <DocLayout
 	titleText="Advanced Examples"
-	descriptionText="Explore advanced features including custom templates, snippets, and complex interactions">
+	descriptionText="Custom snippets and complex interactions">
 
 	<div class="py-4">
-		<!-- Custom Thumb Templates -->
+		<div class="alert alert-info">
+			<strong>Snippet API in v2.0.</strong> Switch uses one snippet — <code>thumb</code>.
+			MultiSwitch has three: <code>thumb</code> (one render in the moving thumb),
+			<code>segment</code> (one render per step background), and <code>label</code>
+			(per-step label). All snippet contexts use <code>&#123; index, item, isSelected &#125;</code>
+			(<code>thumb</code> on MultiSwitch omits <code>isSelected</code> — it's always true).
+		</div>
+
+		<!-- Switch.thumb -->
 		<ShowcaseSection
-			titleText="Custom Thumb Templates"
-			subtitleText="Replace the default thumb with custom content"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Thumb Customization">
+			titleText="AD01 Switch — thumb snippet"
+			subtitleText="Custom content inside the moving thumb"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Notes">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
 					<div class="switch-demo">
-						<span class="switch-label">Custom Icon Thumb:</span>
-						<Switch
-							bind:checked={iconSwitchState}
-							size={80}>
-							{#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+						<span class="switch-label">Day/Night:</span>
+						<Switch bind:checked={iconSwitchState} size={80}>
+							{#snippet thumb()}
 								<div class="d-flex align-items-center justify-content-center h-100 w-100">
 									{iconSwitchState ? '🌞' : '🌙'}
 								</div>
@@ -70,7 +87,7 @@
 					</div>
 
 					<div class="switch-demo">
-						<span class="switch-label">Power Switch:</span>
+						<span class="switch-label">Power label:</span>
 						<Switch
 							bind:checked={customThumbSwitch}
 							size={100}
@@ -78,7 +95,7 @@
 								backgroundColor: customThumbSwitch ? '#e8f5e8' : '#ffebee',
 								thumbColor: customThumbSwitch ? '#4caf50' : '#f44336'
 							}}>
-							{#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+							{#snippet thumb()}
 								<div class="d-flex align-items-center justify-content-center h-100 w-100 text-white fw-bold">
 									{customThumbSwitch ? 'ON' : 'OFF'}
 								</div>
@@ -94,20 +111,26 @@
 					codeContent={`<script>
   let isDayMode = $state(false);
   let powerOn = $state(true);
-</script>
+<\/script>
 
-<!-- Icon thumb template -->
+<!-- Day/night thumb -->
 <Switch bind:checked={isDayMode} size={80}>
-  {#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+  {#snippet thumb()}
     <div class="d-flex align-items-center justify-content-center h-100 w-100">
       {isDayMode ? '🌞' : '🌙'}
     </div>
   {/snippet}
 </Switch>
 
-<!-- Text thumb template -->
-<Switch bind:checked={powerOn} size={100}>
-  {#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+<!-- Text-label thumb with state-driven itemStyles -->
+<Switch
+  bind:checked={powerOn}
+  size={100}
+  itemStyles={{
+    backgroundColor: powerOn ? '#e8f5e8' : '#ffebee',
+    thumbColor: powerOn ? '#4caf50' : '#f44336'
+  }}>
+  {#snippet thumb()}
     <div class="d-flex align-items-center justify-content-center h-100 w-100 text-white fw-bold">
       {powerOn ? 'ON' : 'OFF'}
     </div>
@@ -119,74 +142,88 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>thumbTemplate Snippet</h4>
+					<h4>The thumb snippet</h4>
 					<p>
-						The <code>thumbTemplate</code> snippet receives context about the current state
-						and allows you to render custom content inside the thumb.
+						The <code>thumb</code> snippet replaces the default thumb content. For a
+						binary Switch, the snippet runs once and you usually read the
+						<code>checked</code> state from your own scope (as both examples here do).
 					</p>
-					<h4>Available Parameters</h4>
-					<ul>
-						<li><code>currentIndex</code> - Current selected index</li>
-						<li><code>currentItem</code> - Current item data</li>
-						<li><code>itemsCount</code> - Total number of items</li>
-					</ul>
+					<h4>Snippet context</h4>
+					<p>
+						If you supply <code>items</code>, the snippet receives
+						<code>&#123; index, item &#125;</code> describing the active half of the tuple.
+						For pure binary toggles you can ignore the context entirely.
+					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Custom Children Templates -->
+		<!-- MultiSwitch.segment -->
 		<ShowcaseSection
-			titleText="Custom Children Templates"
-			subtitleText="Customize the content and layout of switch items"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Children Customization">
+			titleText="AD02 MultiSwitch — segment snippet"
+			subtitleText="Custom content rendered once per step background. Pair with thumb to also fill the moving thumb."
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="When to use segment">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<div class="switch-demo" style="padding-bottom: 5rem;">
+					<div class="switch-demo">
 						<span class="switch-label">Status Monitor:</span>
 						<MultiSwitch
-							bind:selectedIndex={customChildrenMulti}
+							bind:selectedIndex={customSegmentMulti}
 							items={statusLevels}
 							size={80}
 							shouldDisplayLabels={true}
-							labelPosition="bottom">
-							{#snippet children({ currentIndex, item, isSelected })}
-								<div class="text-center h-100 d-flex flex-column align-items-center justify-content-center {isSelected ? 'bg-white' : ''}">
-									<div style="font-size: 1.2rem;">{item?.icon || ''}</div>
-									<small class="fw-bold" style="font-size: 0.7rem;">{item?.name || ''}</small>
+							labelPosition="bottom"
+							labelRenderMode="block">
+							{#snippet thumb({ index, item })}
+								<div class="text-center h-100 d-flex flex-column align-items-center justify-content-center">
+									<div style="font-size: 1.2rem;">{item?.icon ?? ''}</div>
+									<small class="fw-bold" style="font-size: 0.7rem;">{item?.name ?? ''}</small>
 								</div>
 							{/snippet}
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+							{#snippet segment({ index, item, isSelected })}
+								<div class="text-center h-100 d-flex flex-column align-items-center justify-content-center">
+									<div style="font-size: 1.2rem; opacity: {isSelected ? 0 : 0.6};">{item?.icon ?? ''}</div>
+									<small class="fw-bold" style="font-size: 0.7rem; opacity: {isSelected ? 0 : 0.6};">{item?.name ?? ''}</small>
+								</div>
+							{/snippet}
+							{#snippet label({ index, item, isSelected })}
 								<div class="text-center mt-2">
-									<small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</small>
-									<div class="small text-muted">{item?.description || ''}</div>
-								</div>
-							{/snippet}
-						</MultiSwitch>						
-					</div>
-
-					<div class="switch-demo" style="padding-bottom: 3.5rem;">
-						<span class="switch-label">Media Controls:</span>
-						<MultiSwitch
-							bind:selectedIndex={customThumbMulti}
-							items={mediaControls}
-							size={60}
-							shouldDisplayLabels={true}
-							labelPosition="bottom">
-							{#snippet children({ currentIndex, item, isSelected })}
-								<div class="text-center">
-									<div class="fs-5">{item?.icon || ''}</div>
-								</div>
-							{/snippet}
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
-								<div class="text-center mt-2">
-									<small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</small>
+									<small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</small>
+									<div class="small text-muted">{item?.description ?? ''}</div>
 								</div>
 							{/snippet}
 						</MultiSwitch>
-						<span class="switch-state">Action: {mediaControls[customThumbMulti].name}</span>
+					</div>
+
+					<div class="switch-demo">
+						<span class="switch-label">Media Controls:</span>
+						<MultiSwitch
+							bind:selectedIndex={mediaThumbMulti}
+							items={mediaControls}
+							size={60}
+							shouldDisplayLabels={true}
+							labelPosition="bottom"
+							labelRenderMode="block">
+							{#snippet thumb({ index, item })}
+								<div class="text-center">
+									<div class="fs-5">{item?.icon ?? ''}</div>
+								</div>
+							{/snippet}
+							{#snippet segment({ index, item, isSelected })}
+								<div class="text-center" style="opacity: {isSelected ? 0 : 0.5};">
+									<div class="fs-5">{item?.icon ?? ''}</div>
+								</div>
+							{/snippet}
+							{#snippet label({ index, item, isSelected })}
+								<div class="text-center mt-2">
+									<small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</small>
+								</div>
+							{/snippet}
+						</MultiSwitch>
+						<span class="switch-state">Action: {mediaControls[mediaThumbMulti].name}</span>
 					</div>
 				</div>
 			{/snippet}
@@ -201,37 +238,33 @@
     { name: 'Warning', icon: '🟡', description: 'Limited functionality' },
     { name: 'Online', icon: '🟢', description: 'Fully operational' }
   ];
+<\/script>
 
-  const mediaControls = [
-    { name: 'Previous', icon: '⏮️' },
-    { name: 'Play', icon: '▶️' },
-    { name: 'Pause', icon: '⏸️' },
-    { name: 'Next', icon: '⏭️' }
-  ];
-</script>
-
-<!-- Status monitor with custom children -->
+<!-- thumb fills the moving thumb (active item) -->
+<!-- segment fills each step background; we dim the active one -->
+<!-- to avoid double-rendering under the thumb. -->
 <MultiSwitch
   bind:selectedIndex={statusIndex}
   items={statusLevels}
   size={80}
-  shouldDisplayLabels={false}>
-  {#snippet children({ currentIndex, item, isSelected })}
-    <div class="text-center p-2 {isSelected ? 'bg-white' : ''}">
-      <div class="fs-4">{item?.icon || ''}</div>
-      <small class="fw-bold">{item?.name || ''}</small>
+  shouldDisplayLabels={true}
+  labelRenderMode="block">
+  {#snippet thumb({ index, item })}
+    <div class="text-center">
+      <div class="fs-4">{item?.icon ?? ''}</div>
+      <small class="fw-bold">{item?.name ?? ''}</small>
     </div>
   {/snippet}
-</MultiSwitch>
-
-<!-- Media controls -->
-<MultiSwitch
-  bind:selectedIndex={mediaIndex}
-  items={mediaControls}
-  size={60}>
-  {#snippet children({ currentIndex, item, isSelected })}
-    <div class="text-center">
-      <div class="fs-5">{item?.icon || ''}</div>
+  {#snippet segment({ index, item, isSelected })}
+    <div class="text-center" style="opacity: {isSelected ? 0 : 0.6};">
+      <div class="fs-4">{item?.icon ?? ''}</div>
+      <small class="fw-bold">{item?.name ?? ''}</small>
+    </div>
+  {/snippet}
+  {#snippet label({ index, item, isSelected })}
+    <div class="text-center mt-2">
+      <small class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</small>
+      <div class="small text-muted">{item?.description ?? ''}</div>
     </div>
   {/snippet}
 </MultiSwitch>`}
@@ -241,69 +274,81 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>children Snippet</h4>
+					<h4>v2.0 split</h4>
 					<p>
-						The <code>children</code> snippet allows you to completely customize
-						the content rendered for each switch option.
+						In 1.x <code>children</code> ran in BOTH the moving thumb and each step
+						background. 2.0 split that into <code>thumb</code> (one render) and
+						<code>segment</code> (one render per step) so each snippet has one job.
 					</p>
-					<h4>Available Parameters</h4>
+					<h4>1.x parity pattern</h4>
+					<p>
+						To get the v1.x behaviour where the thumb showed the active item's content,
+						pass <strong>both</strong> <code>thumb</code> and <code>segment</code> with
+						the same markup. Optionally hide the active segment
+						(<code>opacity: isSelected ? 0 : ...</code>) to avoid double-rendering
+						underneath the thumb.
+					</p>
+					<h4>segment context</h4>
 					<ul>
-						<li><code>currentIndex</code> - Index of this item</li>
-						<li><code>item</code> - The item data</li>
-						<li><code>isSelected</code> - Whether this item is selected</li>
+						<li><code>index</code> — Index of the step (was <code>currentIndex</code>)</li>
+						<li><code>item</code> — The item data for this step</li>
+						<li><code>isSelected</code> — <code>index === activeIndex</code></li>
 					</ul>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Custom Label Templates -->
+		<!-- MultiSwitch.label -->
 		<ShowcaseSection
-			titleText="Custom Label Templates"
-			subtitleText="Advanced label customization for MultiSwitch"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Label Customization">
+			titleText="AD03 MultiSwitch — label snippet"
+			subtitleText="Rich per-step labels with full HTML/Svelte content"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Notes">
 
 			{#snippet demoContent()}
 				<div class="d-flex flex-column gap-4">
-					<div class="switch-demo mb-5">
+					<div class="switch-demo">
 						<span class="switch-label">Power Levels:</span>
 						<MultiSwitch
 							bind:selectedIndex={customLabelMulti}
 							items={powerLevels}
 							size={70}
 							shouldDisplayLabels={true}
-							labelPosition="bottom">
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+							labelPosition="bottom"
+							labelRenderMode="block">
+							{#snippet label({ index, item, isSelected })}
 								<div class="text-center mt-2">
-									<div class="fw-bold" style="color: {item?.color || '#000'}">{item?.level || ''}</div>
-									<div class="small text-muted">{item?.percentage || 0}%</div>
+									<div class="fw-bold" style="color: {item?.color ?? '#000'}">{item?.level ?? ''}</div>
+									<div class="small text-muted">{item?.percentage ?? 0}%</div>
 								</div>
 							{/snippet}
 						</MultiSwitch>
-						<!-- <span class="switch-state">Power: {owerLevels[customLabelMulti].level} ({powerLevels[customLabelMulti].percentage}%)</span> -->
+						<span class="switch-state">
+							{powerLevels[customLabelMulti].level} ({powerLevels[customLabelMulti].percentage}%)
+						</span>
 					</div>
 
 					<div class="switch-demo">
-						<span class="switch-label">Quality Settings:</span>
+						<span class="switch-label">Quality:</span>
 						<MultiSwitch
-							bind:selectedIndex={complexTemplateMulti}
+							bind:selectedIndex={qualityMulti}
 							items={qualitySettings}
 							size={60}
 							shouldDisplayLabels={true}
 							labelPosition="right"
+							labelRenderMode="block"
 							orientation="vertical">
-							{#snippet labelTemplate({ currentIndex, item, isSelected })}
+							{#snippet label({ index, item, isSelected })}
 								<div class="ms-3 d-flex align-items-center gap-2">
-									<span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</span>
+									<span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</span>
 									<span class="small text-muted">•</span>
-									<span class="small text-muted">{item?.resolution || ''}</span>
+									<span class="small text-muted">{item?.resolution ?? ''}</span>
 									<span class="small text-muted">•</span>
-									<span class="small text-muted" style="opacity: 0.7">{item?.size || ''}</span>
+									<span class="small text-muted" style="opacity: 0.7">{item?.size ?? ''}</span>
 								</div>
 							{/snippet}
 						</MultiSwitch>
-						<!-- <span class="switch-state">Quality: {qualitySettings[complexTemplateMulti].name} ({qualitySettings[complexTemplateMulti].resolution})</span> -->
 					</div>
 				</div>
 			{/snippet}
@@ -315,48 +360,49 @@
   let quality = $state(1);
 
   const powerLevels = [
-    { level: 'Eco', percentage: 25, color: '#4caf50' },
-    { level: 'Normal', percentage: 50, color: '#2196f3' },
-    { level: 'Sport', percentage: 75, color: '#ff9800' },
-    { level: 'Race', percentage: 100, color: '#f44336' }
+    { level: 'Eco',    percentage: 25,  color: '#4caf50' },
+    { level: 'Normal', percentage: 50,  color: '#2196f3' },
+    { level: 'Sport',  percentage: 75,  color: '#ff9800' },
+    { level: 'Race',   percentage: 100, color: '#f44336' }
   ];
 
   const qualitySettings = [
-    { name: 'Low', resolution: '480p', size: '~200MB' },
-    { name: 'Medium', resolution: '720p', size: '~500MB' },
-    { name: 'High', resolution: '1080p', size: '~1GB' },
-    { name: 'Ultra', resolution: '4K', size: '~4GB' }
+    { name: 'Low',    resolution: '480p',  size: '~200MB' },
+    { name: 'Medium', resolution: '720p',  size: '~500MB' },
+    { name: 'High',   resolution: '1080p', size: '~1GB' },
+    { name: 'Ultra',  resolution: '4K',    size: '~4GB' }
   ];
-</script>
+<\/script>
 
-<!-- Power levels with colored labels -->
+<!-- Coloured labels -->
 <MultiSwitch
   bind:selectedIndex={powerLevel}
   items={powerLevels}
   shouldDisplayLabels={true}
-  labelPosition="bottom">
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  labelRenderMode="block">
+  {#snippet label({ index, item, isSelected })}
     <div class="text-center mt-2">
-      <div class="fw-bold" style="color: {item?.color || '#000'}">{item?.level || ''}</div>
-      <div class="small text-muted">{item?.percentage || 0}%</div>
+      <div class="fw-bold" style="color: {item?.color ?? '#000'}">{item?.level ?? ''}</div>
+      <div class="small text-muted">{item?.percentage ?? 0}%</div>
     </div>
   {/snippet}
 </MultiSwitch>
 
-<!-- Quality settings with detailed info -->
+<!-- Detailed multi-piece labels -->
 <MultiSwitch
   bind:selectedIndex={quality}
   items={qualitySettings}
   shouldDisplayLabels={true}
   labelPosition="right"
+  labelRenderMode="block"
   orientation="vertical">
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  {#snippet label({ index, item, isSelected })}
     <div class="ms-3 d-flex align-items-center gap-2">
-      <span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''}</span>
+      <span class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''}</span>
       <span class="small text-muted">•</span>
-      <span class="small text-muted">{item?.resolution || ''}</span>
+      <span class="small text-muted">{item?.resolution ?? ''}</span>
       <span class="small text-muted">•</span>
-      <span class="small text-muted" style="opacity: 0.7">{item?.size || ''}</span>
+      <span class="small text-muted" style="opacity: 0.7">{item?.size ?? ''}</span>
     </div>
   {/snippet}
 </MultiSwitch>`}
@@ -366,61 +412,60 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>labelTemplate Snippet</h4>
+					<h4>label snippet (v2.0)</h4>
 					<p>
-						The <code>labelTemplate</code> snippet gives you complete control over
-						how labels are rendered for each option.
+						Renamed from 1.x <code>labelTemplate</code>. Same role: full control over
+						each per-step label.
 					</p>
-					<h4>Rich Label Content</h4>
+					<h4>Snippet context</h4>
+					<ul>
+						<li><code>index</code> — Index of this label</li>
+						<li><code>item</code> — Item data (typed as <code>T | undefined</code>)</li>
+						<li><code>isSelected</code> — Whether this label corresponds to the active step</li>
+					</ul>
+					<h4>Easier alternatives</h4>
 					<p>
-						Labels can include multiple lines, colors, icons, and any other
-						HTML/Svelte content you need.
+						If you only need label text, prefer <code>labelMember</code> or
+						<code>labelCallback</code> — see <a href="/examples/labels">Labels</a>.
 					</p>
 				</div>
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Complex Combined Example -->
+		<!-- Combined example -->
 		<ShowcaseSection
-			titleText="Complete Custom Example"
-			subtitleText="Combining all templating features"
-			demoColumnTitle="Live Demo"
-			controlsColumnTitle="Code"
-			descriptionColumnTitle="Advanced Integration">
+			titleText="AD04 Combined example — thumb + segment + label + itemStyles"
+			subtitleText="Theme selector using all four customization points at once"
+			col1Title="Live Demo"
+			col2Title="Code"
+			col3Title="Combined Use">
 
 			{#snippet demoContent()}
-				<div class="switch-demo" style="padding-bottom: 5rem;">
-					<span class="switch-label">Theme Selector:</span>
+				<div class="switch-demo">
+					<span class="switch-label">Theme:</span>
 					<MultiSwitch
-						bind:selectedIndex={complexTemplateMulti}
-						items={[
-							{ name: 'Light', icon: '☀️', bg: '#ffffff', text: '#000000' },
-							{ name: 'Dark', icon: '🌙', bg: '#1a1a1a', text: '#ffffff' },
-							{ name: 'Auto', icon: '🔄', bg: '#6366f1', text: '#ffffff' }
-						]}
+						bind:selectedIndex={themeMulti}
+						items={themeOptions}
 						size={90}
 						shouldDisplayLabels={true}
 						labelPosition="bottom"
-						itemStyles={[
-							{ backgroundColor: '#f8fafc', thumbColor: '#fbbf24', thumbBorderColor: '#f59e0b' },
-							{ backgroundColor: '#1e293b', thumbColor: '#64748b', thumbBorderColor: '#475569' },
-							{ backgroundColor: '#e0e7ff', thumbColor: '#6366f1', thumbBorderColor: '#4f46e5' }
-						]}>
-						{#snippet children({ currentIndex, item, isSelected })}
+						labelRenderMode="block"
+						itemStyles={themeStyles}>
+						{#snippet segment({ index, item })}
 							<div class="text-center h-100 d-flex align-items-center justify-content-center">
-								<div class="fs-3">{item?.icon || ''}</div>
+								<div class="fs-3">{item?.icon ?? ''}</div>
 							</div>
 						{/snippet}
-						{#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+						{#snippet thumb({ index, item })}
 							<div
 								class="h-100 w-100 d-flex align-items-center justify-content-center"
-								style="background: {currentItem?.bg || '#ffffff'}; color: {currentItem?.text || '#000000'}; border-radius: 2px; margin: 2px;">
-								<small class="fw-bold" style="font-size: 10px;">{currentItem?.name || ''}</small>
+								style="background: {item?.bg ?? '#ffffff'}; color: {item?.text ?? '#000000'}; border-radius: 2px; margin: 2px;">
+								<small class="fw-bold" style="font-size: 10px;">{item?.name ?? ''}</small>
 							</div>
 						{/snippet}
-						{#snippet labelTemplate({ currentIndex, item, isSelected })}
+						{#snippet label({ index, item, isSelected })}
 							<div class="text-center mt-2">
-								<div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''} Theme</div>
+								<div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''} Theme</div>
 								<div class="small text-muted">
 									{#if item?.name === 'Light'}
 										Best for daytime use
@@ -445,8 +490,8 @@
 
   const themes = [
     { name: 'Light', icon: '☀️', bg: '#ffffff', text: '#000000' },
-    { name: 'Dark', icon: '🌙', bg: '#1a1a1a', text: '#ffffff' },
-    { name: 'Auto', icon: '🔄', bg: '#6366f1', text: '#ffffff' }
+    { name: 'Dark',  icon: '🌙', bg: '#1a1a1a', text: '#ffffff' },
+    { name: 'Auto',  icon: '🔄', bg: '#6366f1', text: '#ffffff' }
   ];
 
   const themeStyles = [
@@ -454,33 +499,33 @@
     { backgroundColor: '#1e293b', thumbColor: '#64748b', thumbBorderColor: '#475569' },
     { backgroundColor: '#e0e7ff', thumbColor: '#6366f1', thumbBorderColor: '#4f46e5' }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={themeIndex}
   items={themes}
   size={90}
   shouldDisplayLabels={true}
-  labelPosition="bottom"
+  labelRenderMode="block"
   itemStyles={themeStyles}>
 
-  {#snippet children({ currentIndex, item, isSelected })}
+  {#snippet segment({ index, item })}
     <div class="text-center h-100 d-flex align-items-center justify-content-center">
-      <div class="fs-3">{item?.icon || ''}</div>
+      <div class="fs-3">{item?.icon ?? ''}</div>
     </div>
   {/snippet}
 
-  {#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+  {#snippet thumb({ index, item })}
     <div
-      class="h-100 w-100 d-flex align-items-center justify-content-center rounded-circle"
-      style="background: {currentItem?.bg || '#ffffff'}; color: {currentItem?.text || '#000000'}">
-      <small class="fw-bold">{currentItem?.name || ''}</small>
+      class="h-100 w-100 d-flex align-items-center justify-content-center"
+      style="background: {item?.bg ?? '#ffffff'}; color: {item?.text ?? '#000000'}">
+      <small class="fw-bold">{item?.name ?? ''}</small>
     </div>
   {/snippet}
 
-  {#snippet labelTemplate({ currentIndex, item, isSelected })}
+  {#snippet label({ index, item, isSelected })}
     <div class="text-center mt-2">
-      <div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name || ''} Theme</div>
+      <div class="fw-bold {isSelected ? 'text-primary' : ''}">{item?.name ?? ''} Theme</div>
       <div class="small text-muted">
         {#if item?.name === 'Light'}
           Best for daytime use
@@ -499,12 +544,14 @@
 
 			{#snippet descriptionContent()}
 				<div class="prose">
-					<h4>Complete Customization</h4>
+					<h4>All four together</h4>
 					<p>
-						This example combines all templating features: custom children,
-						thumb template, label template, and individual styling.
+						<code>itemStyles</code> drives per-step background colours,
+						<code>segment</code> renders the static icon per step,
+						<code>thumb</code> shows the theme name in the moving thumb,
+						<code>label</code> renders the rich per-step caption.
 					</p>
-					<h4>Real-world Use Cases</h4>
+					<h4>Real-world fit</h4>
 					<ul>
 						<li>Theme selectors</li>
 						<li>Media players</li>
@@ -515,9 +562,9 @@
 			{/snippet}
 		</ShowcaseSection>
 
-		<!-- Disabled State with Templates -->
+		<!-- Disabled with snippet -->
 		<div class="mt-5">
-			<h2 class="mb-4">Templates with Disabled State</h2>
+			<h2 class="mb-4">Snippets with Disabled State</h2>
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="switch-demo">
@@ -531,7 +578,7 @@
 								thumbColor: '#bdbdbd',
 								thumbBorderColor: '#9e9e9e'
 							}}>
-							{#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+							{#snippet thumb()}
 								<div class="d-flex align-items-center justify-content-center h-100 w-100 text-muted">
 									🔒
 								</div>
@@ -551,7 +598,7 @@
     thumbColor: '#bdbdbd',
     thumbBorderColor: '#9e9e9e'
   }}>
-  {#snippet thumbTemplate({ currentIndex, currentItem, itemsCount })}
+  {#snippet thumb()}
     <div class="d-flex align-items-center justify-content-center h-100 w-100 text-muted">
       🔒
     </div>
@@ -563,7 +610,7 @@
 			</div>
 		</div>
 
-		<!-- Performance Tips -->
+		<!-- Best Practices -->
 		<div class="mt-5">
 			<h2 class="mb-4">Performance & Best Practices</h2>
 			<div class="row g-4">
@@ -573,12 +620,12 @@
 							<h5>⚡ Performance Tips</h5>
 						</div>
 						<div class="card-body">
-							<ul class="list-unstyled">
-								<li>✅ Keep template logic simple</li>
-								<li>✅ Avoid heavy computations in templates</li>
-								<li>✅ Use `$derived` for computed values</li>
-								<li>✅ Minimize DOM elements in templates</li>
-								<li>✅ Cache expensive operations</li>
+							<ul class="list-unstyled mb-0">
+								<li>✅ Keep snippet logic simple</li>
+								<li>✅ Avoid heavy computations in snippets</li>
+								<li>✅ Use <code>$derived</code> for computed values</li>
+								<li>✅ Minimize DOM elements in snippets</li>
+								<li>✅ Cache expensive operations outside the snippet</li>
 							</ul>
 						</div>
 					</div>
@@ -586,15 +633,15 @@
 				<div class="col-md-6">
 					<div class="card h-100">
 						<div class="card-header">
-							<h5>🎯 Template Guidelines</h5>
+							<h5>🎯 Snippet Guidelines</h5>
 						</div>
 						<div class="card-body">
-							<ul class="list-unstyled">
+							<ul class="list-unstyled mb-0">
+								<li>✅ Pick the right snippet (thumb vs segment vs label)</li>
 								<li>✅ Design for touch interfaces</li>
 								<li>✅ Ensure content fits in available space</li>
-								<li>✅ Test with different data lengths</li>
-								<li>✅ Consider loading states</li>
-								<li>✅ Maintain consistent styling</li>
+								<li>✅ Use <code>?.</code> on optional item properties</li>
+								<li>✅ Test with different item shapes</li>
 							</ul>
 						</div>
 					</div>
@@ -611,7 +658,7 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">📚</div>
 							<h5>API Reference</h5>
-							<p>Complete documentation of all props and methods</p>
+							<p>Complete documentation of all props</p>
 							<a href="/api/switch" class="btn btn-primary">Switch API</a>
 						</div>
 					</div>
@@ -619,10 +666,10 @@
 				<div class="col-md-4">
 					<div class="card text-center h-100">
 						<div class="card-body">
-							<div class="display-6 mb-3">🎮</div>
-							<h5>Playground</h5>
-							<p>Interactive playground to test your ideas</p>
-							<a href="/examples/basic" class="btn btn-outline-primary">Basic Examples</a>
+							<div class="display-6 mb-3">🎨</div>
+							<h5>Theming</h5>
+							<p>Cross-library --base-* cascade</p>
+							<a href="/examples/theming" class="btn btn-outline-primary">Theming</a>
 						</div>
 					</div>
 				</div>
@@ -631,7 +678,7 @@
 						<div class="card-body">
 							<div class="display-6 mb-3">🏠</div>
 							<h5>Back to Home</h5>
-							<p>Return to the main showcase page</p>
+							<p>Return to the showcase landing page</p>
 							<a href="/" class="btn btn-outline-primary">Home</a>
 						</div>
 					</div>

@@ -4,14 +4,14 @@
 
 <DocLayout
 	titleText="MultiSwitch API Reference"
-	descriptionText="Complete API documentation for the MultiSwitch component">
+	descriptionText="Complete API documentation for the MultiSwitch component (v2.0+)">
 
 	<div class="py-4">
-		<!-- Component Overview -->
+		<!-- Overview -->
 		<div class="mb-5">
 			<h2 class="mb-3">📚 MultiSwitch Component</h2>
 			<p class="lead">
-				A multi-option switch component for selecting between multiple choices with Svelte 5 support.
+				A multi-step switch (3+ options) with Svelte 5 runes, snippets, and generic typing.
 			</p>
 
 			<div class="row g-4 mb-4">
@@ -27,9 +27,13 @@
 						codeContent={`<script>
   let selectedIndex = $state(0);
   const options = ['Option A', 'Option B', 'Option C'];
-</script>
+<\/script>
 
-<MultiSwitch bind:selectedIndex items={options} />`}
+<MultiSwitch
+  bind:selectedIndex
+  items={options}
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />`}
 						languageType="svelte"
 						titleText="Basic Usage"
 					/>
@@ -45,10 +49,10 @@
 					<thead class="table-light">
 						<tr>
 							<th style="width: 18%">Property</th>
-							<th style="width: 22%">Type</th>
+							<th style="width: 28%">Type</th>
 							<th style="width: 12%">Default</th>
-							<th style="width: 35%">Description</th>
-							<th style="width: 13%">Version</th>
+							<th style="width: 32%">Description</th>
+							<th style="width: 10%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -56,135 +60,158 @@
 							<td><code>selectedIndex</code></td>
 							<td><code>number</code></td>
 							<td><code>0</code></td>
-							<td>Currently selected index (bindable)</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td>Currently selected index (bindable via <code>bind:selectedIndex</code>)</td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 						<tr>
-							<td><code>items</code> *</td>
-							<td><code>any[]</code></td>
-							<td><code>required</code></td>
-							<td>Array of options to display</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td><code>items</code></td>
+							<td><code>readonly T[] | null</code></td>
+							<td><code>null</code></td>
+							<td>Array of options. Generic over <code>T</code> — type flows through to all snippets and callbacks.</td>
+							<td><span class="badge bg-warning">2.0+ generic</span></td>
+						</tr>
+						<tr>
+							<td><code>itemsCount</code></td>
+							<td><code>number</code></td>
+							<td><code>0</code></td>
+							<td>Number of steps (when not deriving from <code>items</code>)</td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>isDisabled</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
 							<td>Disables interaction when true</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>orientation</code></td>
 							<td><code>"horizontal" | "vertical"</code></td>
 							<td><code>"horizontal"</code></td>
-							<td>Layout direction of the switch</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td>Layout direction</td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>size</code></td>
-							<td><code>number</code></td>
-							<td><code>50</code></td>
-							<td>Height in pixels (width for vertical)</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td><code>"xs" | "sm" | "md" | "lg" | "xl" | number</code></td>
+							<td><code>"md"</code></td>
+							<td>Named size or numeric pixels. Default changed from <code>50</code> to <code>"md"</code> in 2.0.</td>
+							<td><span class="badge bg-warning">2.0+ named</span></td>
 						</tr>
 						<tr>
 							<td><code>itemStyles</code></td>
 							<td><code>StepStyle | StepStyle[]</code></td>
-							<td><code>[]</code></td>
-							<td>Custom styling for each option</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td><code>undefined</code></td>
+							<td>Per-step styles. Object applies to every step; array applies per-step (length = items.length).</td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 						<tr>
 							<td><code>shouldDisplayLabels</code></td>
 							<td><code>boolean</code></td>
 							<td><code>false</code></td>
-							<td>Show/hide option labels</td>
-							<td><span class="badge bg-success">1.3.0+</span></td>
+							<td>Show or hide option labels</td>
+							<td><span class="badge bg-success">1.3+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelPosition</code></td>
 							<td><code>"top" | "bottom" | "left" | "right"</code></td>
 							<td><code>"bottom"</code></td>
-							<td>Position of labels relative to switch</td>
-							<td><span class="badge bg-success">1.3.0+</span></td>
+							<td>Position of labels relative to the switch</td>
+							<td><span class="badge bg-success">1.3+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelRenderMode</code></td>
 							<td><code>"absolute" | "block"</code></td>
 							<td><code>"absolute"</code></td>
-							<td>Label rendering mode - absolute (may overlap) or block (takes space)</td>
-							<td><span class="badge bg-warning">1.4.0+</span></td>
+							<td><code>"block"</code> reserves layout space; <code>"absolute"</code> overlays (needs manual padding)</td>
+							<td><span class="badge bg-warning">1.4+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelMember</code></td>
-							<td><code>string</code></td>
+							<td><code>keyof T | string</code></td>
 							<td><code>undefined</code></td>
-							<td>Property name to extract label text from items (e.g., "name" reads item.name)</td>
-							<td><span class="badge bg-warning">1.4.0+</span></td>
+							<td>Property name to read from each item (e.g., <code>"name"</code> reads <code>item.name</code>)</td>
+							<td><span class="badge bg-warning">1.4+</span></td>
 						</tr>
 						<tr>
 							<td><code>labelCallback</code></td>
-							<td><code>(item: any, index: number) => string</code></td>
+							<td><code>(item: T | undefined, index: number) =&gt; string</code></td>
 							<td><code>undefined</code></td>
-							<td>Custom function to generate label text with item and index access</td>
-							<td><span class="badge bg-warning">1.4.0+</span></td>
+							<td>Custom function returning the label text for each item</td>
+							<td><span class="badge bg-warning">1.4+</span></td>
 						</tr>
 						<tr>
 							<td><code>onItemChange</code></td>
-							<td><code>(index: number) => void</code></td>
+							<td><code>(index: number) =&gt; void</code></td>
 							<td><code>undefined</code></td>
-							<td>Callback fired when selection changes</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
-						</tr>
-						<tr>
-							<td><code>disableThumbRender</code></td>
-							<td><code>boolean</code></td>
-							<td><code>false</code></td>
-							<td>Disable default thumb rendering</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td>Callback fired when the selection changes</td>
+							<td><span class="badge bg-primary">1.0+</span></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<p class="text-muted">
-				<small>* Required property</small>
-			</p>
+		</div>
+
+		<!-- Removed in 2.0 -->
+		<div class="mb-5">
+			<h3 class="mb-4">❌ Removed in v2.0</h3>
+			<div class="alert alert-warning">
+				<ul class="mb-0">
+					<li>
+						<code>disableThumbRender</code> — no longer needed; just don't pass the
+						<code>thumb</code> snippet.
+					</li>
+					<li>
+						<code>update()</code> instance method — Svelte 5 props are reactive; mutate
+						the <code>$state</code> object passed to <code>mount()</code>.
+					</li>
+				</ul>
+			</div>
 		</div>
 
 		<!-- Snippets -->
 		<div class="mb-5">
-			<h3 class="mb-4">🎭 Template Snippets</h3>
+			<h3 class="mb-4">🎭 Snippets</h3>
 			<div class="table-responsive">
 				<table class="table table-bordered">
 					<thead class="table-light">
 						<tr>
-							<th style="width: 23%">Snippet</th>
-							<th style="width: 32%">Parameters</th>
-							<th style="width: 32%">Description</th>
-							<th style="width: 13%">Version</th>
+							<th style="width: 18%">Snippet</th>
+							<th style="width: 32%">Context</th>
+							<th style="width: 35%">Role</th>
+							<th style="width: 15%">Version</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td><code>children</code></td>
-							<td><code>currentIndex: number<br>item: any<br>isSelected: boolean</code></td>
-							<td>Custom content snippet for option areas</td>
-							<td><span class="badge bg-primary">1.0.0+</span></td>
+							<td><code>thumb</code></td>
+							<td><code>{`{ index, item }`}</code></td>
+							<td>Renders <strong>once</strong> inside the moving thumb. <code>index</code> = active index.</td>
+							<td><span class="badge bg-warning">2.0+ split</span></td>
 						</tr>
 						<tr>
-							<td><code>thumbTemplate</code></td>
-							<td><code>currentIndex: number<br>currentItem: any<br>itemsCount: number</code></td>
-							<td>Custom thumb content snippet</td>
-							<td><span class="badge bg-info">1.2.0+</span></td>
+							<td><code>segment</code></td>
+							<td><code>{`{ index, item, isSelected }`}</code></td>
+							<td>Renders <strong>once per step background</strong>. Use for static per-step content.</td>
+							<td><span class="badge bg-warning">2.0+ split</span></td>
 						</tr>
 						<tr>
-							<td><code>labelTemplate</code></td>
-							<td><code>currentIndex: number<br>item: any<br>isSelected: boolean</code></td>
-							<td>Custom label template snippet</td>
-							<td><span class="badge bg-success">1.3.0+</span></td>
+							<td><code>label</code></td>
+							<td><code>{`{ index, item, isSelected }`}</code></td>
+							<td>Custom per-step label content. Renamed from <code>labelTemplate</code> in 2.0.</td>
+							<td><span class="badge bg-warning">2.0+ renamed</span></td>
 						</tr>
 					</tbody>
 				</table>
+			</div>
+			<div class="alert alert-info">
+				<strong>v2.0 snippet rewrite.</strong> 1.x had one ambiguous <code>children</code>
+				snippet that ran in BOTH the moving thumb and each step background. 2.0 split it
+				into <code>thumb</code> (one render) + <code>segment</code> (one render per step)
+				so each snippet has one job. <code>labelTemplate</code> was also renamed to
+				<code>label</code>. Snippet context shape unified:
+				<code>currentIndex</code> → <code>index</code>,
+				<code>currentItem</code> → <code>item</code>.
 			</div>
 		</div>
 
@@ -192,13 +219,28 @@
 		<div class="mb-5">
 			<h3 class="mb-4">📋 Type Definitions</h3>
 
-			<h5>StepStyle Interface</h5>
+			<h5>StepStyle interface</h5>
 			<CodeBlock
 				codeContent={`interface StepStyle {
-  backgroundColor?: string;
-  thumbColor?: string;
-  thumbBorderColor?: string;
+  backgroundColor?: string;   // Step background colour
+  thumbColor?: string;        // Thumb fill colour
+  thumbBorderColor?: string;  // Thumb border colour
 }`}
+				languageType="typescript"
+			/>
+
+			<h5 class="mt-3">Generic items signature</h5>
+			<CodeBlock
+				codeContent={`// MultiSwitch.items is generic over T
+type MultiSwitchItems<T> = readonly T[] | null;
+
+// Snippet contexts (typed via T)
+type ThumbContext<T>   = { index: number; item: T | undefined };
+type SegmentContext<T> = { index: number; item: T | undefined; isSelected: boolean };
+type LabelContext<T>   = { index: number; item: T | undefined; isSelected: boolean };
+
+// labelCallback signature
+type LabelCallback<T> = (item: T | undefined, index: number) => string;`}
 				languageType="typescript"
 			/>
 		</div>
@@ -214,19 +256,20 @@
 						codeContent={`<script>
   let selected = $state(1);
   const options = ['Small', 'Medium', 'Large'];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selected}
   items={options}
-  shouldDisplayLabels={true} />
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />
 <p>Selected: {options[selected]}</p>`}
 						languageType="svelte"
 					/>
 				</div>
 
 				<div class="col-lg-6">
-					<h5>Custom Styling per Option</h5>
+					<h5>Per-Step Styling</h5>
 					<CodeBlock
 						codeContent={`<script>
   const styles = [
@@ -234,28 +277,32 @@
     { backgroundColor: '#e8f5e8', thumbColor: '#4caf50' },
     { backgroundColor: '#e3f2fd', thumbColor: '#2196f3' }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
+  bind:selectedIndex={selected}
   items={['Low', 'Medium', 'High']}
-  itemStyles={styles} />`}
+  itemStyles={styles}
+  shouldDisplayLabels={true}
+  labelRenderMode="block" />`}
 						languageType="svelte"
 					/>
 				</div>
 
 				<div class="col-lg-6">
-					<h5>Custom Label Template</h5>
+					<h5>label snippet (rich content)</h5>
 					<CodeBlock
 						codeContent={`<MultiSwitch
   bind:selectedIndex={selected}
   items={plans}
-  shouldDisplayLabels={true}>
-  {#snippet labelTemplate({ item, isSelected })}
+  shouldDisplayLabels={true}
+  labelRenderMode="block">
+  {#snippet label({ index, item, isSelected })}
     <div class="text-center mt-2">
       <div class="fw-bold {isSelected ? 'text-primary' : ''}">
-        {item?.name || ''}
+        {item?.name ?? ''}
       </div>
-      <small class="text-muted">{item?.price || ''}</small>
+      <small class="text-muted">{item?.price ?? ''}</small>
     </div>
   {/snippet}
 </MultiSwitch>`}
@@ -264,107 +311,30 @@
 				</div>
 
 				<div class="col-lg-6">
-					<h5>Vertical with Custom Content</h5>
+					<h5>thumb + segment snippets</h5>
 					<CodeBlock
 						codeContent={`<MultiSwitch
   bind:selectedIndex={selected}
   items={themes}
   orientation="vertical"
   size={80}>
-  {#snippet children({ item, isSelected })}
-    <div class="text-center h-100 d-flex align-items-center justify-content-center">
-      <div style="font-size: 1.5rem;">{item?.icon || ''}</div>
+  {#snippet thumb({ index, item })}
+    <div class="text-center fs-4">
+      {item?.icon ?? ''}
     </div>
+  {/snippet}
+  {#snippet segment({ index, item, isSelected })}
+    <small class="opacity-{isSelected ? '100' : '50'}">
+      {item?.icon ?? ''}
+    </small>
   {/snippet}
 </MultiSwitch>`}
 						languageType="svelte"
 					/>
 				</div>
-			</div>
-		</div>
 
-		<!-- Label Positioning -->
-		<div class="mb-5">
-			<h3 class="mb-4">🏷️ Label Positioning & Rendering</h3>
-			<div class="alert alert-info">
-				<strong>💡 New in v1.4.0:</strong> Use <code>labelRenderMode="block"</code> for automatic spacing,
-				or stick with <code>labelRenderMode="absolute"</code> (default) for precise control with manual padding.
-			</div>
-			<div class="alert alert-warning">
-				<strong>⚠️ Absolute Mode:</strong> Labels are absolutely positioned and don't reserve space in the layout.
-				Add appropriate padding to prevent overlap:
-			</div>
-
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<thead class="table-light">
-						<tr>
-							<th>Position</th>
-							<th>Required Padding</th>
-							<th>Works With</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><code>top</code></td>
-							<td><code>padding-top: 3rem</code></td>
-							<td>Horizontal & Vertical</td>
-						</tr>
-						<tr>
-							<td><code>bottom</code></td>
-							<td><code>padding-bottom: 2.5rem</code></td>
-							<td>Horizontal & Vertical</td>
-						</tr>
-						<tr>
-							<td><code>left</code></td>
-							<td><code>padding-left: 5rem</code></td>
-							<td>Vertical only</td>
-						</tr>
-						<tr>
-							<td><code>right</code></td>
-							<td><code>padding-right: 6-8rem</code></td>
-							<td>Vertical only</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<CodeBlock
-				codeContent={`<!-- Absolute mode - manual spacing required -->
-<div style="padding-bottom: 2.5rem;">
-  <MultiSwitch
-    items={options}
-    shouldDisplayLabels={true}
-    labelPosition="bottom"
-    labelRenderMode="absolute" />
-</div>
-
-<!-- Block mode - automatic spacing -->
-<MultiSwitch
-  items={options}
-  shouldDisplayLabels={true}
-  labelPosition="bottom"
-  labelRenderMode="block" />`}
-				languageType="svelte"
-			/>
-		</div>
-
-		<!-- Label Content Features (v1.4.0+) -->
-		<div class="mb-5">
-			<h3 class="mb-4">🔤 Label Content Features (v1.4.0+)</h3>
-			<p>Advanced label text handling with automatic extraction from object properties or custom functions.</p>
-
-			<h5>Label Priority System</h5>
-			<ol>
-				<li><strong>labelMember</strong> - Extract text from object property</li>
-				<li><strong>labelCallback</strong> - Custom function with item and index access</li>
-				<li><strong>labelTemplate</strong> - Full custom rendering control</li>
-				<li><strong>Default</strong> - "Option 1", "Option 2", etc.</li>
-			</ol>
-
-			<div class="row g-4">
 				<div class="col-lg-6">
-					<h6>Object Property Extraction</h6>
+					<h5>labelMember (object property)</h5>
 					<CodeBlock
 						codeContent={`<script>
   const products = [
@@ -372,7 +342,7 @@
     { name: 'Pro', price: 25 },
     { name: 'Enterprise', price: 99 }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selected}
@@ -385,7 +355,7 @@
 				</div>
 
 				<div class="col-lg-6">
-					<h6>Custom Label Function</h6>
+					<h5>labelCallback (computed string)</h5>
 					<CodeBlock
 						codeContent={`<script>
   const plans = [
@@ -393,63 +363,121 @@
     { tier: 'Pro', price: 29, features: 10 },
     { tier: 'Enterprise', price: 99, features: 25 }
   ];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={selected}
   items={plans}
-  labelCallback={(item, index) => \`\${item.tier} - $\${item.price}/mo\`}
+  labelCallback={(item, index) =>
+    \`\${item?.tier ?? ''} - $\${item?.price ?? 0}/mo\`}
   shouldDisplayLabels={true}
   labelRenderMode="block" />`}
 						languageType="svelte"
 					/>
 				</div>
 			</div>
+		</div>
 
-			<div class="alert alert-success mt-3">
-				<strong>💡 Clickable Labels:</strong> In vertical mode with left/right label positions,
-				labels become clickable when no <code>thumbTemplate</code> is defined. Click any label to jump directly to that option!
+		<!-- Label Positioning -->
+		<div class="mb-5">
+			<h3 class="mb-4">🏷️ Label Positioning & Rendering</h3>
+			<div class="alert alert-success">
+				<strong>💡 Recommended:</strong> Use <code>labelRenderMode="block"</code> in
+				most cases — it reserves layout space automatically. <code>"absolute"</code> is
+				the legacy default and requires manual padding.
+			</div>
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead class="table-light">
+						<tr>
+							<th>Position</th>
+							<th>Required (absolute mode only)</th>
+							<th>Works With</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><code>top</code></td>
+							<td><code>padding-top: 3rem</code></td>
+							<td>Horizontal only</td>
+						</tr>
+						<tr>
+							<td><code>bottom</code> (default)</td>
+							<td><code>padding-bottom: 2.5rem</code></td>
+							<td>Horizontal only</td>
+						</tr>
+						<tr>
+							<td><code>left</code></td>
+							<td><code>padding-left: 5rem</code></td>
+							<td>Vertical only</td>
+						</tr>
+						<tr>
+							<td><code>right</code></td>
+							<td><code>padding-right: 6–8rem</code></td>
+							<td>Vertical only</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<CodeBlock
+				codeContent={`<!-- Block mode — automatic spacing (recommended) -->
+<MultiSwitch
+  items={options}
+  shouldDisplayLabels={true}
+  labelPosition="bottom"
+  labelRenderMode="block" />
+
+<!-- Absolute mode — manual padding required -->
+<div style="padding-bottom: 2.5rem;">
+  <MultiSwitch
+    items={options}
+    shouldDisplayLabels={true}
+    labelPosition="bottom"
+    labelRenderMode="absolute" />
+</div>`}
+				languageType="svelte"
+			/>
+		</div>
+
+		<!-- Label Content Features -->
+		<div class="mb-5">
+			<h3 class="mb-4">🔤 Label Content (priority system)</h3>
+			<p>
+				Label text resolves through this priority chain (highest to lowest):
+			</p>
+			<ol>
+				<li><strong>label snippet</strong> — full custom rendering, takes precedence over everything</li>
+				<li><strong>labelMember</strong> — read text from object property</li>
+				<li><strong>labelCallback</strong> — compute text from item + index</li>
+				<li><strong>Default</strong> — <code>"Option 1"</code>, <code>"Option 2"</code>, ...</li>
+			</ol>
+
+			<div class="alert alert-success">
+				<strong>💡 Clickable per-step labels:</strong> In vertical mode with
+				<code>"left"</code>/<code>"right"</code> label positions, labels render as real
+				<code>&lt;button&gt;</code> elements with keyboard activation. This activates only
+				when no <code>thumb</code> snippet is provided.
 			</div>
 		</div>
 
-		<!-- SCSS Variables -->
+		<!-- Theming -->
 		<div class="mb-5">
-			<h3 class="mb-4">🎨 SCSS Variables</h3>
-			<p>Override these variables before importing the component styles:</p>
-
-			<CodeBlock
-				codeContent={`// Core Variables
-$border-radius: 4px;
-$margin: 2px;
-$switch-height: 32px;
-$thumb-height: 28px;
-$transition-duration: 0.3s;
-$transition-easing: ease;
-$shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-$focus-shadow: 0 0 0 3px $focus-color;
-
-// Label Variables
-$label-gap: 8px;
-$label-font-size: 12px;
-
-// Color Variables
-$switch-bg-off: #ccc;
-$switch-bg-on: #4299e1;
-$thumb-bg: white;
-$focus-color: rgba(66, 153, 225, 0.5);
-$default-label-color: #666;
-$default-label-active-color: #333;
-$default-label-font-weight: normal;
-$default-label-active-font-weight: bold;
-
-// Multi-switch specific
-$multi-switch-bg: #f5f5f5;
-$multi-switch-active-bg: #4299e1;
-
-// Import component styles
-@import '@keenmate/svelte-switch/style';`}
-				languageType="scss"
-			/>
+			<h3 class="mb-4">🎨 Theming</h3>
+			<p>
+				v2.0 introduced a full theming layer (<code>--base-*</code> cascade +
+				<code>--sw-*</code> per-instance overrides). See the dedicated
+				<a href="/examples/theming">Theming</a> page for the live preset gallery.
+			</p>
+			<p>
+				MultiSwitch-specific variables added in 2.0:
+			</p>
+			<ul>
+				<li><code>--sw-step-bg</code> / <code>--sw-step-bg-active</code> — step segment surfaces</li>
+				<li><code>--sw-label-color</code> / <code>--sw-label-active-color</code> — label colours</li>
+				<li><code>--sw-label-hover-bg</code> / <code>--sw-label-hover-bg-active</code> — clickable label hover</li>
+			</ul>
 		</div>
 
 		<!-- Accessibility -->
@@ -464,11 +492,10 @@ $multi-switch-active-bg: #4299e1;
 						<div class="card-body">
 							<ul class="list-unstyled mb-0">
 								<li>✅ Keyboard navigation (Arrow keys, Home, End)</li>
-								<li>✅ Focus management with visible indicators</li>
-								<li>✅ ARIA attributes (role, aria-selected)</li>
-								<li>✅ Screen reader support</li>
+								<li>✅ Per-step labels are real <code>&lt;button&gt;</code>s</li>
+								<li>✅ Focus ring with theme-aware colour</li>
+								<li>✅ ARIA <code>role</code> + <code>aria-selected</code></li>
 								<li>✅ Disabled state handling</li>
-								<li>✅ Proper tab order</li>
 							</ul>
 						</div>
 					</div>
@@ -480,62 +507,15 @@ $multi-switch-active-bg: #4299e1;
 						</div>
 						<div class="card-body">
 							<ul class="list-unstyled mb-0">
-								<li>🎯 Provide clear labels or context</li>
-								<li>🎯 Ensure sufficient color contrast</li>
-								<li>🎯 Test with keyboard navigation</li>
+								<li>🎯 Provide a label or accessible name nearby</li>
+								<li>🎯 Ensure sufficient colour contrast on themed surfaces</li>
+								<li>🎯 Test keyboard navigation</li>
 								<li>🎯 Consider reduced motion preferences</li>
-								<li>🎯 Use semantic option descriptions</li>
-								<li>🎯 Test with screen readers</li>
 							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- Component Methods -->
-		<div class="mb-5">
-			<h3 class="mb-4">⚙️ Component Methods</h3>
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<thead class="table-light">
-						<tr>
-							<th style="width: 25%">Method</th>
-							<th style="width: 35%">Signature</th>
-							<th style="width: 40%">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><code>update</code></td>
-							<td><code>(props: Partial&lt;MultiSwitchProps&gt;) => void</code></td>
-							<td>Programmatically update component properties</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<CodeBlock
-				codeContent={`// Get component reference
-let multiSwitchRef;
-
-// Update multiple properties including v1.4.0+ features
-multiSwitchRef.update({
-  selectedIndex: 2,
-  isDisabled: false,
-  size: 60,
-  shouldDisplayLabels: true,
-  labelRenderMode: 'block',
-  labelPosition: 'bottom',
-  labelMember: 'displayName',
-  itemStyles: [
-    { thumbColor: '#10b981' },
-    { thumbColor: '#f59e0b' },
-    { thumbColor: '#ef4444' }
-  ]
-});`}
-				languageType="javascript"
-			/>
 		</div>
 
 		<!-- Common Patterns -->
@@ -549,14 +529,14 @@ multiSwitchRef.update({
 						codeContent={`<script>
   let quality = $state(1);
   const qualityOptions = ['Low', 'Medium', 'High', 'Ultra'];
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={quality}
   items={qualityOptions}
   shouldDisplayLabels={true}
-  labelPosition="bottom"
-  size={50} />`}
+  labelRenderMode="block"
+  labelPosition="bottom" />`}
 						languageType="svelte"
 					/>
 				</div>
@@ -569,17 +549,17 @@ multiSwitchRef.update({
   const tabs = ['Home', 'About', 'Services', 'Contact'];
 
   const handleTabChange = (index) => {
-    // Navigate to different sections
     scrollToSection(tabs[index].toLowerCase());
   };
-</script>
+<\/script>
 
 <MultiSwitch
   bind:selectedIndex={activeTab}
   items={tabs}
-  onSelectionChange={handleTabChange}
+  onItemChange={handleTabChange}
   shouldDisplayLabels={true}
-  size={40} />`}
+  labelRenderMode="block"
+  size="sm" />`}
 						languageType="svelte"
 					/>
 				</div>
